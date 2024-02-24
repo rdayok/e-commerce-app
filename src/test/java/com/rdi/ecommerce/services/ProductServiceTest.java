@@ -36,9 +36,7 @@ public class ProductServiceTest {
         productRequest.setProductName("TV");
         productRequest.setProductCategory(ELECTRONIC);
         productRequest.setProductDescription("Flat scree 50 inc Lg TV");
-        productRequest.setStoreId(merchantRegisterResponse.getStore().getId());
         productRequest.setMerchantId(merchantRegisterResponse.getId());
-//        productRequest.setQuantity(5);
 
         ProductResponse productResponse = productService.addProduct(productRequest);
 

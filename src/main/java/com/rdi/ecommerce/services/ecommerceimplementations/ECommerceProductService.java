@@ -30,22 +30,12 @@ public class ECommerceProductService implements ProductService {
 
     @Override
     public ProductResponse addProduct(ProductRequest productRequest) throws
-            StoreNotFoundException, MerchantNotFoundException, MerchantIsNotOwnerOfStoreException {
+            MerchantNotFoundException {
         Long merchantId = productRequest.getMerchantId();
-        Long storeId = productRequest.getStoreId();
-        Merchant foundMerchant = merchantService.getMerchantBy(storeId);
-        if(!merchantId.equals(foundMerchant.getId()))
-            throw new MerchantIsNotOwnerOfStoreException(
-                    String.format("The merchant with id %d trying to add product " +
-                            "to store is not the owner of store", merchantId
-                    ));
-        Store store = storeService.getStoreBy(storeId);
-//        Product product = new Product();
-//        product.setProductCategory(productRequest.getProductCategory());
-//        product.setProductName(productRequest.getProductName());
-//        product.setProductDescription(productRequest.getProductDescription());
+        Merchant foundMerchant = merchantService.getMerchantBy(merchantId);
+        Store merchantStore = foundMerchant.getStore();
         Product product = modelMapper.map(productRequest, Product.class);
-        product.setStore(store);
+        product.setStore(merchantStore);
         Product addedProduct = productRepository.save(product);
         return modelMapper.map(addedProduct, ProductResponse.class);
     }

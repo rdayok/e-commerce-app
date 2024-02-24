@@ -2,14 +2,12 @@ package com.rdi.ecommerce.services;
 
 import com.rdi.ecommerce.data.model.Store;
 import com.rdi.ecommerce.dto.*;
-import com.rdi.ecommerce.exceptions.MerchantNotFoundException;
 import com.rdi.ecommerce.exceptions.StoreNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static com.rdi.ecommerce.enums.Category.ELECTRONIC;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest

@@ -10,6 +10,8 @@ import com.rdi.ecommerce.exceptions.StoreNotFoundException;
 
 public interface StoreService {
     Store getStoreBy(Long storeId) throws StoreNotFoundException;
+
+
 //    StoreResponse createStore(StoreRequest storeRequest) throws MerchantNotFoundException;
 
 //    Store getStoreByMerchantId(Long merchantId) throws StoreNotFoundException;

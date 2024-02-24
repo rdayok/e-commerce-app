@@ -16,6 +16,4 @@ public class Store {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     private String storeName;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Inventory inventory;
 }

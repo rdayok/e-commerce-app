@@ -33,8 +33,6 @@ public class ECommerceMerchantService implements MerchantService {
         merchant.setUser(user);
         Store store = new Store();
         store.setStoreName(merchantRegisterRequest.getStoreName());
-        Inventory inventory = new Inventory();
-        store.setInventory(inventory);
         merchant.setStore(store);
         Merchant registeredMerchant = merchantRepository.save(merchant);
         return modelMapper.map(registeredMerchant, MerchantRegisterResponse.class);
