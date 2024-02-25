@@ -6,5 +6,6 @@ import com.rdi.ecommerce.exceptions.MerchantNotFoundException;
 import com.rdi.ecommerce.exceptions.ProductNotFoundException;
 
 public interface InventoryService {
-    ProductRecordResponse addProductRecord(ProductRecordRequest productRecordRequest) throws MerchantNotFoundException, ProductNotFoundException;
+    ProductRecordResponse addProductRecord(ProductRecordRequest productRecordRequest) throws
+            MerchantNotFoundException, ProductNotFoundException;
 }

@@ -18,6 +18,4 @@ public class Buyer {
     @OneToOne(cascade = CascadeType.PERSIST)
     private User user;
     private String phoneNumber;
-    @OneToOne(cascade = ALL)
-    private Cart cart;
 }

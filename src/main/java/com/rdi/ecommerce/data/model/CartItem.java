@@ -5,21 +5,21 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-
-import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.ALL;
+import static jakarta.persistence.CascadeType.DETACH;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
-@Setter
 @Getter
+@Setter
 @ToString
-public class Cart {
+public class CartItem {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+    private int itemQuantity;
     @OneToOne(cascade = DETACH)
-    private Buyer buyer;
-    @OneToMany(fetch = FetchType.EAGER, cascade = ALL)
-    private List<CartItem> cartItems;
+    private Product product;
+    @ManyToOne(cascade = DETACH)
+    private Cart cart;
 }

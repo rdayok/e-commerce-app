@@ -10,5 +10,4 @@ import lombok.ToString;
 @ToString
 public class BuyerRegisterResponse {
     private Long id;
-    private CartResponse cart;
 }

@@ -30,8 +30,6 @@ public class ECommerceBuyerService implements BuyerService {
         Buyer buyer = new Buyer();
         buyer.setUser(user);
         buyer.setPhoneNumber(buyerRegisterRequest.getPhoneNumber());
-        Cart cart = new Cart();
-        buyer.setCart(cart);
         Buyer registeredBuyer = buyerRepository.save(buyer);
         return modelMapper.map(registeredBuyer, BuyerRegisterResponse.class);
     }
