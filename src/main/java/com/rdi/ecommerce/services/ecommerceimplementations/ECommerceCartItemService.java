@@ -28,7 +28,8 @@ public class ECommerceCartItemService implements CartItemService {
 
     @Override
     @Transactional
-    public ApiResponse<?> addCartItem(AddToCartRequest addToCartRequest) throws ProductNotFoundException, ProductInventoryNotFoundException {
+    public ApiResponse<?> addCartItem(AddToCartRequest addToCartRequest) throws
+            ProductNotFoundException, ProductInventoryNotFoundException {
         Long productId = addToCartRequest.getProductId();
         Product gottenProduct = productService.getProductBy(productId);
         Long buyerId = addToCartRequest.getBuyerId();
@@ -37,13 +38,30 @@ public class ECommerceCartItemService implements CartItemService {
         ApiResponse<?> reservationResponse = inventoryService.reserveProductBy(productInventoryId);
         Cart foundCart = cartService.findByBuyerId(buyerId);
         CartItem cartItem = new CartItem();
-        cartItem.setItemQuantity(1);
+        cartItem.increaseItemQuantity();
         cartItem.setProduct(gottenProduct);
         cartItem.setCart(foundCart);
         CartItem savedCart = cartItemRepository.save(cartItem);
-        ApiResponse<?> response = new ApiResponse<>();
         System.out.println(savedCart);
-        response.setMessage(String.format("successful %d", savedCart.getId()));
-        return response;
+        return new ApiResponse<>("SUCCESSFUL");
+    }
+
+    @Override
+    public ApiResponse<?> removeCartItem(AddToCartRequest addToCartRequest) throws ProductNotFoundException, ProductInventoryNotFoundException {
+        Long productId = addToCartRequest.getProductId();
+        Product gottenProduct = productService.getProductBy(productId);
+        Long buyerId = addToCartRequest.getBuyerId();
+        ProductInventory productInventory = gottenProduct.getProductInventory();
+        Long productInventoryId = productInventory.getId();
+        ApiResponse<?> reservationResponse = inventoryService.reserveProductBy(productInventoryId);
+        Cart foundCart = cartService.findByBuyerId(buyerId);
+        CartItem cartItem = new CartItem();
+        cartItem.increaseItemQuantity();
+        cartItem.setProduct(gottenProduct);
+        cartItem.setCart(foundCart);
+        CartItem savedCart = cartItemRepository.save(cartItem);
+        System.out.println(savedCart);
+        return new ApiResponse<>("SUCCESSFUL");
+        return null;
     }
 }

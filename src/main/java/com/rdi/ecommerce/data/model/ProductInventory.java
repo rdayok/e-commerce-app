@@ -15,8 +15,8 @@ public class ProductInventory {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    private int availableQuantity;
-    private int reservedQuantity;
+    private Integer availableQuantity;
+    private Integer reservedQuantity = 0;
     private Long soldQuantity;
 
     public void reserveOneProduct() {
@@ -24,4 +24,7 @@ public class ProductInventory {
         reservedQuantity++;
     }
 
+    public void restockProduct(Integer quantityOfProductToRestock) {
+        availableQuantity += quantityOfProductToRestock;
+    }
 }

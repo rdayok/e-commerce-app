@@ -5,8 +5,8 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class ProductRecordRequest {
+public class ProductRestockRequest {
     private Long productId;
     private Long merchantId;
-    private int productQuantity;
+    private Integer productQuantity;
 }

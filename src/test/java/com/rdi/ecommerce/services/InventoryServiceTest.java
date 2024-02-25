@@ -22,33 +22,6 @@ public class InventoryServiceTest {
     @Autowired
     private InventoryService inventoryService;
 
-    @Test
-    public void testAddProductRecordToStoreInventory() throws
-            StoreNotFoundException, MerchantNotFoundException, MerchantIsNotOwnerOfStoreException, ProductNotFoundException {
-        UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
-        userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
-        userRegisterRequestForMerchant.setPassword("secretekey");
-        MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
-        merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
-        merchantRegisterRequest.setStoreName("wadrobe");
-        MerchantRegisterResponse merchantRegisterResponse = merchantService.register(merchantRegisterRequest);
-        ProductRequest productRequest = new ProductRequest();
-        productRequest.setProductName("TV");
-        productRequest.setProductCategory(ELECTRONIC);
-        productRequest.setProductDescription("Flat scree 50 inc Lg TV");
-        productRequest.setInitialQuantity(40);
-        productRequest.setMerchantId(merchantRegisterResponse.getId());
-        ProductResponse productResponse = productService.addProduct(productRequest);
-        ProductRecordRequest productRecordRequest = new ProductRecordRequest();
-        productRecordRequest.setProductQuantity(50);
-        productRecordRequest.setProductId(productResponse.getId());
-        productRecordRequest.setMerchantId(merchantRegisterResponse.getId());
-
-        ProductInventoryResponse productRecordResponse = inventoryService.addProductRecord(productRecordRequest);
-
-        assertThat(productRecordResponse).isNotNull();
-        log.info("{}", productRecordResponse);
-    }
 
     @Test
     public void testReserveProductByProductInventoryId() throws
@@ -69,11 +42,50 @@ public class InventoryServiceTest {
         productRequest.setInitialQuantity(productInitialQuantity);
         productRequest.setMerchantId(merchantRegisterResponse.getId());
         ProductResponse productResponse = productService.addProduct(productRequest);
+
         ProductInventoryResponse productInventoryResponse = productResponse.getProductInventory();
-        ApiResponse<?> response = inventoryService.reserveProductBy(productInventoryResponse.getId());
+        Long productInventoryId = productInventoryResponse.getId();
+        ApiResponse<?> response = inventoryService.reserveProductBy(productInventoryId);
+
         assertThat(productInventoryResponse).isNotNull();
         assertThat(response).isNotNull();
         assertEquals("SUCCESSFUL", response.getMessage());
         log.info("{}", productInventoryResponse);
+    }
+
+
+
+    @Test
+    public void testRestockingA_Product() throws
+            StoreNotFoundException, MerchantNotFoundException,
+            MerchantIsNotOwnerOfStoreException, ProductNotFoundException, CannotRestockAnotherMerchantProduct {
+
+        UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
+        userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
+        userRegisterRequestForMerchant.setPassword("secretekey");
+        MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
+        merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
+        merchantRegisterRequest.setStoreName("wadrobe");
+        MerchantRegisterResponse merchantRegisterResponse = merchantService.register(merchantRegisterRequest);
+        ProductRequest productRequest = new ProductRequest();
+        productRequest.setProductName("TV");
+        productRequest.setProductCategory(ELECTRONIC);
+        productRequest.setProductDescription("Flat scree 50 inc Lg TV");
+        Integer productInitialQuantity = 50;
+        productRequest.setInitialQuantity(productInitialQuantity);
+        productRequest.setMerchantId(merchantRegisterResponse.getId());
+        ProductResponse productResponse = productService.addProduct(productRequest);
+
+        ProductRestockRequest productRestockRequest = new ProductRestockRequest();
+        Long productId = productResponse.getId();
+        productRestockRequest.setProductId(productId);
+        Long merchantId = merchantRegisterResponse.getId();
+        productRestockRequest.setMerchantId(merchantId);
+        Integer quantityOfProduct = 100;
+        productRestockRequest.setProductQuantity(quantityOfProduct);
+
+        ApiResponse<?> productRestockResponse = inventoryService.restockProduct(productRestockRequest);
+        assertThat(productRestockResponse).isNotNull();
+        assertEquals("SUCCESSFUL", productRestockResponse.getMessage());
     }
 }

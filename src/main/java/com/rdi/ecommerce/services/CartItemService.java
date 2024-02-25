@@ -7,4 +7,6 @@ import com.rdi.ecommerce.exceptions.ProductNotFoundException;
 
 public interface CartItemService {
     ApiResponse<?> addCartItem(AddToCartRequest addToCartRequest) throws ProductNotFoundException, ProductInventoryNotFoundException;
+
+    ApiResponse<?> removeCartItem(AddToCartRequest addToCartRequest) throws ProductNotFoundException, ProductInventoryNotFoundException;
 }
