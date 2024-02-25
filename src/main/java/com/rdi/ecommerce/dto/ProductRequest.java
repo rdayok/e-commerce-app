@@ -4,7 +4,6 @@ import com.rdi.ecommerce.enums.Category;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.modelmapper.internal.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 
 @Setter
 @Getter
@@ -24,7 +23,7 @@ public class ProductRequest {
 //    private Long storeId;
 
     private Long merchantId;
-//    @NotNull(message = "Provide an initial quantity of product to stock")
-//    @Positive(message = "The number should be greater than 0")
-//    private int quantity;
+    @NotNull(message = "Provide an initial quantity of product to stock")
+    @Positive(message = "The number should be greater than 0")
+    private Integer initialQuantity;
 }

@@ -10,4 +10,5 @@ import lombok.ToString;
 public class ProductResponse {
     private Long id;
     private StoreResponse store;
+    private ProductInventoryResponse productInventory;
 }

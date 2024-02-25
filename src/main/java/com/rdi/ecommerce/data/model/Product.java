@@ -24,6 +24,8 @@ public class Product {
     private Store store;
     @Enumerated(EnumType.STRING)
     private Category productCategory;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ProductInventory productInventory;
     private LocalDateTime dateProductWasAdded;
 
     @PrePersist

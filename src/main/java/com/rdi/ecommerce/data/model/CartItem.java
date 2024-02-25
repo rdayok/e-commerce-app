@@ -20,6 +20,7 @@ public class CartItem {
     private int itemQuantity;
     @OneToOne(cascade = DETACH)
     private Product product;
-    @ManyToOne(cascade = DETACH)
+    @ManyToOne
+    @JoinColumn(name = "cart")
     private Cart cart;
 }

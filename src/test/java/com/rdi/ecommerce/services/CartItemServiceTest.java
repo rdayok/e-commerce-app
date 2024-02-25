@@ -27,7 +27,7 @@ public class CartItemServiceTest {
     private CartItemService cartItemService;
 
     @Test
-    public void testAddCartItem() throws StoreNotFoundException, MerchantNotFoundException, MerchantIsNotOwnerOfStoreException, BuyerNotFoundException, ProductNotFoundException {
+    public void testAddCartItem() throws StoreNotFoundException, MerchantNotFoundException, MerchantIsNotOwnerOfStoreException, BuyerNotFoundException, ProductNotFoundException, ProductInventoryNotFoundException {
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
         userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
         userRegisterRequestForMerchant.setPassword("secretekey");

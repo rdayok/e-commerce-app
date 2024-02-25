@@ -1,14 +1,12 @@
 package com.rdi.ecommerce.dto;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Setter
 @Getter
-@RequiredArgsConstructor
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class ApiResponse<T> {
-    private T message;
+    private String message;
 }

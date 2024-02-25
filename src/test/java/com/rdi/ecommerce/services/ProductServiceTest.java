@@ -1,10 +1,8 @@
 package com.rdi.ecommerce.services;
 
-import com.rdi.ecommerce.data.model.Product;
 import com.rdi.ecommerce.dto.*;
 import com.rdi.ecommerce.exceptions.MerchantIsNotOwnerOfStoreException;
 import com.rdi.ecommerce.exceptions.MerchantNotFoundException;
-import com.rdi.ecommerce.exceptions.ProductNotFoundException;
 import com.rdi.ecommerce.exceptions.StoreNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -37,6 +35,7 @@ public class ProductServiceTest {
         productRequest.setProductCategory(ELECTRONIC);
         productRequest.setProductDescription("Flat scree 50 inc Lg TV");
         productRequest.setMerchantId(merchantRegisterResponse.getId());
+        productRequest.setInitialQuantity(5);
 
         ProductResponse productResponse = productService.addProduct(productRequest);
 

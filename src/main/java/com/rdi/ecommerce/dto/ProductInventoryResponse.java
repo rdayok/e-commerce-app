@@ -7,6 +7,6 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class ProductRecordResponse {
+public class ProductInventoryResponse {
     private Long id;
 }

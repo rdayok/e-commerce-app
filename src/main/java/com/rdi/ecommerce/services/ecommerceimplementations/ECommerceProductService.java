@@ -2,14 +2,13 @@ package com.rdi.ecommerce.services.ecommerceimplementations;
 
 import com.rdi.ecommerce.data.model.Merchant;
 import com.rdi.ecommerce.data.model.Product;
+import com.rdi.ecommerce.data.model.ProductInventory;
 import com.rdi.ecommerce.data.model.Store;
 import com.rdi.ecommerce.data.repository.ProductRepository;
 import com.rdi.ecommerce.dto.ProductRequest;
 import com.rdi.ecommerce.dto.ProductResponse;
-import com.rdi.ecommerce.exceptions.MerchantIsNotOwnerOfStoreException;
 import com.rdi.ecommerce.exceptions.MerchantNotFoundException;
 import com.rdi.ecommerce.exceptions.ProductNotFoundException;
-import com.rdi.ecommerce.exceptions.StoreNotFoundException;
 import com.rdi.ecommerce.services.MerchantService;
 import com.rdi.ecommerce.services.ProductService;
 import com.rdi.ecommerce.services.StoreService;
@@ -23,9 +22,7 @@ public class ECommerceProductService implements ProductService {
 
     private final MerchantService merchantService;
     private final ModelMapper modelMapper;
-
     private final StoreService storeService;
-
     private final ProductRepository productRepository;
 
     @Override
@@ -36,6 +33,9 @@ public class ECommerceProductService implements ProductService {
         Store merchantStore = foundMerchant.getStore();
         Product product = modelMapper.map(productRequest, Product.class);
         product.setStore(merchantStore);
+        ProductInventory productInventory = new ProductInventory();
+        productInventory.setAvailableQuantity(productRequest.getInitialQuantity());
+        product.setProductInventory(productInventory);
         Product addedProduct = productRepository.save(product);
         return modelMapper.map(addedProduct, ProductResponse.class);
     }
