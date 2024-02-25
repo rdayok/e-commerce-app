@@ -15,4 +15,6 @@ public interface InventoryService {
             MerchantNotFoundException, ProductNotFoundException, CannotRestockAnotherMerchantProduct;
 
     ApiResponse<?> reserveProductBy(Long productInventoryId) throws ProductInventoryNotFoundException;
+
+    ApiResponse<?> returnReserveProductBy(Long productInventoryId) throws ProductInventoryNotFoundException;
 }

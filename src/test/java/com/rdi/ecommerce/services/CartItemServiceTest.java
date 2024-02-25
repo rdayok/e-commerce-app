@@ -62,6 +62,7 @@ public class CartItemServiceTest {
         AddToCartRequest addToCartRequest = new AddToCartRequest();
         addToCartRequest.setProductId(productResponse.getId());
         addToCartRequest.setBuyerId(buyerRegisterResponse.getId());
+        addToCartRequest.setCartId(cartResponse.getId());
         ApiResponse<?> response = cartItemService.addCartItem(addToCartRequest);
 
         assertThat(response).isNotNull();
@@ -72,7 +73,7 @@ public class CartItemServiceTest {
     public void testRemoveCartItem() throws
             StoreNotFoundException, MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, BuyerNotFoundException,
-            ProductNotFoundException, ProductInventoryNotFoundException {
+            ProductNotFoundException, ProductInventoryNotFoundException, CannotTakeOutCartItemThatDoesNotExistInYOurCartException {
 
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
         userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
@@ -104,6 +105,8 @@ public class CartItemServiceTest {
         AddToCartRequest addToCartRequest = new AddToCartRequest();
         addToCartRequest.setProductId(productResponse.getId());
         addToCartRequest.setBuyerId(buyerRegisterResponse.getId());
+        addToCartRequest.setCartId(cartResponse.getId());
+        cartItemService.addCartItem(addToCartRequest);
         ApiResponse<?> response = cartItemService.removeCartItem(addToCartRequest);
 
         assertThat(response).isNotNull();

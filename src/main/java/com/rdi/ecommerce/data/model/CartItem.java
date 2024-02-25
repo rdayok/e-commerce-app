@@ -26,4 +26,8 @@ public class CartItem {
     public void increaseItemQuantity() {
         itemQuantity++;
     }
+
+    public void decreaseItemQuantity() {
+        itemQuantity--;
+    }
 }

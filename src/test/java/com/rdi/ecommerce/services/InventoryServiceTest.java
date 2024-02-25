@@ -56,6 +56,38 @@ public class InventoryServiceTest {
 
 
     @Test
+    public void testReturnReserveProductByProductInventoryId() throws
+            StoreNotFoundException, MerchantNotFoundException,
+            MerchantIsNotOwnerOfStoreException, ProductNotFoundException, ProductInventoryNotFoundException {
+        UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
+        userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
+        userRegisterRequestForMerchant.setPassword("secretekey");
+        MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
+        merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
+        merchantRegisterRequest.setStoreName("wadrobe");
+        MerchantRegisterResponse merchantRegisterResponse = merchantService.register(merchantRegisterRequest);
+        ProductRequest productRequest = new ProductRequest();
+        productRequest.setProductName("TV");
+        productRequest.setProductCategory(ELECTRONIC);
+        productRequest.setProductDescription("Flat scree 50 inc Lg TV");
+        Integer productInitialQuantity = 50;
+        productRequest.setInitialQuantity(productInitialQuantity);
+        productRequest.setMerchantId(merchantRegisterResponse.getId());
+        ProductResponse productResponse = productService.addProduct(productRequest);
+
+        ProductInventoryResponse productInventoryResponse = productResponse.getProductInventory();
+        Long productInventoryId = productInventoryResponse.getId();
+        inventoryService.reserveProductBy(productInventoryId);
+        ApiResponse<?> response = inventoryService.returnReserveProductBy(productInventoryId);
+
+        assertThat(productInventoryResponse).isNotNull();
+        assertThat(response).isNotNull();
+        assertEquals("SUCCESSFUL", response.getMessage());
+        log.info("{}", productInventoryResponse);
+    }
+
+
+    @Test
     public void testRestockingA_Product() throws
             StoreNotFoundException, MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, ProductNotFoundException, CannotRestockAnotherMerchantProduct {

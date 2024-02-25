@@ -1,9 +1,9 @@
 package com.rdi.ecommerce.services.ecommerceimplementations;
 
 import com.rdi.ecommerce.data.model.*;
+import com.rdi.ecommerce.data.repository.InventoryRepository;
 import com.rdi.ecommerce.dto.ApiResponse;
 import com.rdi.ecommerce.dto.ProductRestockRequest;
-import com.rdi.ecommerce.dto.ProductInventoryResponse;
 import com.rdi.ecommerce.exceptions.CannotRestockAnotherMerchantProduct;
 import com.rdi.ecommerce.exceptions.MerchantNotFoundException;
 import com.rdi.ecommerce.exceptions.ProductInventoryNotFoundException;
@@ -53,6 +53,19 @@ public class ECommerceInventoryService implements InventoryService {
                         String.format("The product inventory with the id %d does not exist", productInventoryId)
                 ));
         productInventory.reserveOneProduct();
+        System.out.println(productInventory  + " reserving product");
+        ProductInventory updatedProductInventory = inventoryRepository.save(productInventory);
+        return  new ApiResponse<>("SUCCESSFUL");
+    }
+
+    @Override
+    public ApiResponse<?> returnReserveProductBy(Long productInventoryId) throws ProductInventoryNotFoundException {
+        ProductInventory productInventory = inventoryRepository.findById(productInventoryId).orElseThrow(() ->
+                new ProductInventoryNotFoundException(
+                        String.format("The product inventory with the id %d does not exist", productInventoryId)
+                ));
+        productInventory.returnOneProduct();
+        System.out.println(productInventory + " returning product");
         ProductInventory updatedProductInventory = inventoryRepository.save(productInventory);
         return  new ApiResponse<>("SUCCESSFUL");
     }
