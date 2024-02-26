@@ -2,7 +2,7 @@ package com.rdi.ecommerce.services.ecommerceimplementations;
 
 import com.rdi.ecommerce.config.PayStackConfig;
 import com.rdi.ecommerce.dto.PaymentRequest;
-import com.rdi.ecommerce.dto.PaymentResponse;
+import com.rdi.ecommerce.dto.PayStackPaymentResponse;
 import com.rdi.ecommerce.dto.VerifyPaymentResponse;
 import com.rdi.ecommerce.services.PaymentService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class PayStackPaymentService implements PaymentService {
 
     private final PayStackConfig payStackConfig;
     @Override
-    public PaymentResponse initialisePayment(PaymentRequest paymentRequest) {
+    public PayStackPaymentResponse initialisePayment(PaymentRequest paymentRequest) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         String URL = payStackConfig.getInitialisePaymentUrl();
@@ -33,7 +33,7 @@ public class PayStackPaymentService implements PaymentService {
         httpHeaders.set("Content-Type", APPLICATION_JSON_VALUE);
         httpHeaders.set("accept", APPLICATION_JSON_VALUE);
         HttpEntity<PaymentRequest> requestHttpEntity = new RequestEntity<>(paymentRequest, httpHeaders, POST, URI.create(""));
-        ResponseEntity<PaymentResponse> responseEntity = restTemplate.postForEntity(URL, requestHttpEntity, PaymentResponse.class);
+        ResponseEntity<PayStackPaymentResponse> responseEntity = restTemplate.postForEntity(URL, requestHttpEntity, PayStackPaymentResponse.class);
         return responseEntity.getBody();
     }
 

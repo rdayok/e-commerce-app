@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 
 import static com.rdi.ecommerce.enums.Category.ELECTRONIC;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.in;
 
 @SpringBootTest
 @Slf4j
@@ -32,7 +31,7 @@ public class OrderServiceTest {
 
 
     @Test
-    public void testInitialisingPaymentForBuyer() throws
+    public void testCheck() throws
             StoreNotFoundException, MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, BuyerNotFoundException,
             ProductNotFoundException, ProductInventoryNotFoundException {
@@ -44,6 +43,7 @@ public class OrderServiceTest {
         merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
         merchantRegisterRequest.setStoreName("wadrobe");
         MerchantRegisterResponse merchantRegisterResponse = merchantService.register(merchantRegisterRequest);
+
         ProductRequest productRequest = new ProductRequest();
         productRequest.setProductName("TV");
         productRequest.setProductCategory(ELECTRONIC);
@@ -53,6 +53,7 @@ public class OrderServiceTest {
         productRequest.setInitialQuantity(productInitialQuantity);
         productRequest.setMerchantId(merchantRegisterResponse.getId());
         ProductResponse productResponse = productService.addProduct(productRequest);
+
         UserRegisterRequest userRegisterRequestForBuyer = new UserRegisterRequest();
         userRegisterRequestForBuyer.setEmail("max_ret@yahoo.com");
         userRegisterRequestForBuyer.setPassword("secretekey");
@@ -60,10 +61,11 @@ public class OrderServiceTest {
         buyerRegisterRequest.setUserRegisterRequest(userRegisterRequestForBuyer);
         buyerRegisterRequest.setPhoneNumber("07031005737");
         BuyerRegisterResponse buyerRegisterResponse = buyerService.register(buyerRegisterRequest);
+
         CartRequest cartRequest = new CartRequest();
         cartRequest.setBuyerId(buyerRegisterResponse.getId());
         CartResponse cartResponse = cartService.createCart(cartRequest);
-        assertThat(cartResponse).isNotNull();
+
         AddToCartRequest addToCartRequest = new AddToCartRequest();
         addToCartRequest.setProductId(productResponse.getId());
         addToCartRequest.setBuyerId(buyerRegisterResponse.getId());
@@ -72,13 +74,9 @@ public class OrderServiceTest {
         ApiResponse<?> response2 = cartItemService.addCartItem(addToCartRequest);
         assertThat(response2).isNotNull();
 
-        InitialisePaymentRequest initialisePaymentRequest = new InitialisePaymentRequest();
-        initialisePaymentRequest.setBuyerId(buyerRegisterResponse.getId());
-        initialisePaymentRequest.setCartId(cartResponse.getId());
+        CheckOutResponse checkOutResponse = orderService.checkOut(buyerRegisterResponse.getId());
 
-        PaymentResponse paymentResponse = orderService.initialisePayment(buyerRegisterResponse.getId());
-
-        assertThat(paymentResponse).isNotNull();
-        log.info("{}", paymentResponse);
+        assertThat(checkOutResponse).isNotNull();
+        log.info("{}", checkOutResponse);
     }
 }
