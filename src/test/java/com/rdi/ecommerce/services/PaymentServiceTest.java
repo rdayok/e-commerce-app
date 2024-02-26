@@ -2,6 +2,7 @@ package com.rdi.ecommerce.services;
 
 import com.rdi.ecommerce.dto.PaymentRequest;
 import com.rdi.ecommerce.dto.PaymentResponse;
+import com.rdi.ecommerce.dto.VerifyPaymentResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,21 @@ public class PaymentServiceTest {
 
         assertThat(paymentResponse).isNotNull();
         log.info("{}", paymentResponse);
+    }
+
+
+    @Test
+    public void testVerifyPayment() {
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setEmail("dayokr@gmail.com");
+        paymentRequest.setAmount(BigDecimal.valueOf(5000));
+        PaymentResponse paymentResponse = paymentService.initialisePayment(paymentRequest);
+        assertThat(paymentResponse).isNotNull();
+        String paymentReference = paymentResponse.getData().getReference();
+
+        VerifyPaymentResponse verifyPaymentResponse = paymentService.verifyPayment(paymentReference);
+
+        assertThat(verifyPaymentResponse).isNotNull();
+        log.info("{}", verifyPaymentResponse);
     }
 }

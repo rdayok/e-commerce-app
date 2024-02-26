@@ -78,7 +78,6 @@ public class OrderServiceTest {
 
         PaymentResponse paymentResponse = orderService.initialisePayment(buyerRegisterResponse.getId());
 
-
         assertThat(paymentResponse).isNotNull();
         log.info("{}", paymentResponse);
     }

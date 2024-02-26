@@ -3,6 +3,7 @@ package com.rdi.ecommerce.services.ecommerceimplementations;
 import com.rdi.ecommerce.config.PayStackConfig;
 import com.rdi.ecommerce.dto.PaymentRequest;
 import com.rdi.ecommerce.dto.PaymentResponse;
+import com.rdi.ecommerce.dto.VerifyPaymentResponse;
 import com.rdi.ecommerce.services.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -14,8 +15,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
@@ -34,6 +35,21 @@ public class PayStackPaymentService implements PaymentService {
         HttpEntity<PaymentRequest> requestHttpEntity = new RequestEntity<>(paymentRequest, httpHeaders, POST, URI.create(""));
         ResponseEntity<PaymentResponse> responseEntity = restTemplate.postForEntity(URL, requestHttpEntity, PaymentResponse.class);
         return responseEntity.getBody();
+    }
+
+    @Override
+    public VerifyPaymentResponse verifyPayment(String paymentReference) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("Authorization", payStackConfig.getAuthorization());
+        httpHeaders.set("Content-Type", APPLICATION_JSON_VALUE);
+        httpHeaders.set("accept", APPLICATION_JSON_VALUE);
+        HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
+        RequestEntity<String> requestEntity = new RequestEntity<>(httpHeaders, GET, URI.create(""));
+        String rootURL = payStackConfig.getVerifyPaymentUrl();
+        String URL = String.format("%s%s", rootURL, paymentReference);
+        ResponseEntity<VerifyPaymentResponse> verifyPaymentResponseResponseEntity = restTemplate.exchange(URL, GET, httpEntity, VerifyPaymentResponse.class);
+        return verifyPaymentResponseResponseEntity.getBody();
     }
 
 }

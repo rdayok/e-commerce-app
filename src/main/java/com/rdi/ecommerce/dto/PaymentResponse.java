@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PaymentResponse {
-    private boolean status;
-    private String message;
+//    private boolean status;
+//    private String message;
     private Data data;
 }
