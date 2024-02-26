@@ -24,7 +24,7 @@ public class PayStackPaymentService implements PaymentService {
 
     private final PayStackConfig payStackConfig;
     @Override
-    public PaymentResponse pay(PaymentRequest paymentRequest) {
+    public PaymentResponse initialisePayment(PaymentRequest paymentRequest) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         String URL = payStackConfig.getInitialisePaymentUrl();

@@ -19,12 +19,12 @@ public class PaymentServiceTest {
     private PaymentService paymentService;
 
     @Test
-    public void testPayment() {
+    public void testInitialisePayment() {
         PaymentRequest paymentRequest = new PaymentRequest();
         paymentRequest.setEmail("dayokr@gmail.com");
         paymentRequest.setAmount(BigDecimal.valueOf(1000));
 
-        PaymentResponse paymentResponse = paymentService.pay(paymentRequest);
+        PaymentResponse paymentResponse = paymentService.initialisePayment(paymentRequest);
 
         assertThat(paymentResponse).isNotNull();
         log.info("{}", paymentResponse);

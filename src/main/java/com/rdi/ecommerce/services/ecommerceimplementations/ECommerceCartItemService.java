@@ -13,6 +13,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ECommerceCartItemService implements CartItemService {
@@ -38,14 +40,12 @@ public class ECommerceCartItemService implements CartItemService {
         Long cartId = foundCart.getId();
         CartItem foundCartItem = cartItemRepository.findByProductIdAndCartId(productId, cartId);
         if(foundCartItem == null){
-            System.out.println("i came here man ...");
             foundCartItem = new CartItem();
             foundCartItem.increaseItemQuantity();
             foundCartItem.setProduct(gottenProduct);
             foundCartItem.setCart(foundCart);
         }else foundCartItem.increaseItemQuantity();
         CartItem savedCart = cartItemRepository.save(foundCartItem);
-        System.out.println(savedCart);
         return new ApiResponse<>("SUCCESSFUL");
     }
 
@@ -68,7 +68,11 @@ public class ECommerceCartItemService implements CartItemService {
             );
         foundCartItem.decreaseItemQuantity();
         CartItem savedCart = cartItemRepository.save(foundCartItem);
-        System.out.println(savedCart);
         return new ApiResponse<>("SUCCESSFUL");
+    }
+
+    @Override
+    public List<CartItem> findAllCartItemBuyCartId(Long cartId) {
+         return cartItemRepository.findAllByCartId(cartId);
     }
 }

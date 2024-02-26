@@ -43,6 +43,36 @@ public class ProductServiceTest {
         log.info("{}", productResponse);
     }
 
+    @Test
+    public void testAddTwoProductToStore() throws MerchantNotFoundException, StoreNotFoundException, MerchantIsNotOwnerOfStoreException {
+        UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
+        userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
+        userRegisterRequestForMerchant.setPassword("secretekey");
+        MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
+        merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
+        merchantRegisterRequest.setStoreName("wadrobe");
+        MerchantRegisterResponse merchantRegisterResponse = merchantService.register(merchantRegisterRequest);
+        ProductRequest productRequest = new ProductRequest();
+        productRequest.setProductName("TV");
+        productRequest.setProductCategory(ELECTRONIC);
+        productRequest.setProductDescription("Flat scree 50 inc Lg TV");
+        productRequest.setMerchantId(merchantRegisterResponse.getId());
+        productRequest.setInitialQuantity(5);
+        ProductResponse productResponse = productService.addProduct(productRequest);
+        ProductRequest productRequest2 = new ProductRequest();
+        productRequest2.setProductName("Sound Bar");
+        productRequest2.setProductCategory(ELECTRONIC);
+        productRequest2.setProductDescription("A black 180W bluetoth sound bar with wofer");
+        Integer productInitialQuantity2 = 50;
+        productRequest2.setInitialQuantity(productInitialQuantity2);
+        productRequest2.setMerchantId(merchantRegisterResponse.getId());
+        ProductResponse productResponse2 = productService.addProduct(productRequest2);
+
+        assertThat(productResponse).isNotNull();
+        assertThat(productResponse2).isNotNull();
+        log.info("{} {}", productResponse, productResponse2);
+    }
+
 //    @Test
 //    public void testGetProductById() throws MerchantNotFoundException, StoreNotFoundException, ProductNotFoundException {
 //        UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();

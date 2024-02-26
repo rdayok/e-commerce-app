@@ -5,5 +5,5 @@ import com.rdi.ecommerce.dto.PaymentResponse;
 
 public interface PaymentService {
 
-    PaymentResponse pay(PaymentRequest paymentRequest);
+    PaymentResponse initialisePayment(PaymentRequest paymentRequest);
 }

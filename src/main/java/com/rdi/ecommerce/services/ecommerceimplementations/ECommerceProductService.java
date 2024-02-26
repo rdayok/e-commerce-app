@@ -31,7 +31,10 @@ public class ECommerceProductService implements ProductService {
         Long merchantId = productRequest.getMerchantId();
         Merchant foundMerchant = merchantService.getMerchantBy(merchantId);
         Store merchantStore = foundMerchant.getStore();
-        Product product = modelMapper.map(productRequest, Product.class);
+        Product product = new Product();
+        product.setProductName(productRequest.getProductName());
+        product.setProductDescription(product.getProductDescription());
+        product.setProductCategory(productRequest.getProductCategory());
         product.setStore(merchantStore);
         ProductInventory productInventory = new ProductInventory();
         productInventory.setAvailableQuantity(productRequest.getInitialQuantity());
@@ -39,6 +42,7 @@ public class ECommerceProductService implements ProductService {
         Product addedProduct = productRepository.save(product);
         return modelMapper.map(addedProduct, ProductResponse.class);
     }
+
 
     @Override
     public Product getProductBy(Long productId) throws ProductNotFoundException {

@@ -7,9 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     @Query("SELECT b FROM CartItem b WHERE b.product.id = :productId AND b.cart.id = :cartId")
     CartItem findByProductIdAndCartId(@Param("productId") Long productId, @Param("cartId") Long cartId);
 
+    List<CartItem> findAllByCartId(Long cartId);
 }
