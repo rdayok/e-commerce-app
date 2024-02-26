@@ -16,7 +16,7 @@ public class CartItem {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-    private int itemQuantity = 0;
+    private Integer itemQuantity = 0;
     @OneToOne(cascade = DETACH)
     private Product product;
     @ManyToOne

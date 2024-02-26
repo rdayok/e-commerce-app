@@ -22,7 +22,7 @@ public class PaymentServiceTest {
     public void testInitialisePayment() {
         PaymentRequest paymentRequest = new PaymentRequest();
         paymentRequest.setEmail("dayokr@gmail.com");
-        paymentRequest.setAmount(BigDecimal.valueOf(1000));
+        paymentRequest.setAmount(BigDecimal.valueOf(5000));
 
         PaymentResponse paymentResponse = paymentService.initialisePayment(paymentRequest);
 

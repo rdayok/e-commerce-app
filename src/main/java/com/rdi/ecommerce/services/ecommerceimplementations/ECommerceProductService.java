@@ -39,6 +39,7 @@ public class ECommerceProductService implements ProductService {
         ProductInventory productInventory = new ProductInventory();
         productInventory.setAvailableQuantity(productRequest.getInitialQuantity());
         product.setProductInventory(productInventory);
+        product.setPricePerUnit(productRequest.getPricePerUnit());
         Product addedProduct = productRepository.save(product);
         return modelMapper.map(addedProduct, ProductResponse.class);
     }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -26,6 +27,7 @@ public class Product {
     private Category productCategory;
     @OneToOne(cascade = CascadeType.ALL)
     private ProductInventory productInventory;
+    private BigDecimal pricePerUnit;
     private LocalDateTime dateProductWasAdded;
 
     @PrePersist

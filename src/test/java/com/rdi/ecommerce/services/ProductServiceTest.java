@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+
 import static com.rdi.ecommerce.enums.Category.ELECTRONIC;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -36,6 +38,7 @@ public class ProductServiceTest {
         productRequest.setProductDescription("Flat scree 50 inc Lg TV");
         productRequest.setMerchantId(merchantRegisterResponse.getId());
         productRequest.setInitialQuantity(5);
+        productRequest.setPricePerUnit(BigDecimal.valueOf(50000));
 
         ProductResponse productResponse = productService.addProduct(productRequest);
 

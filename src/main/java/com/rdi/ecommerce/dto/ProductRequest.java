@@ -5,6 +5,8 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Setter
 @Getter
 public class ProductRequest {
@@ -22,4 +24,5 @@ public class ProductRequest {
     @NotNull(message = "Provide an initial quantity of product to stock")
     @Positive(message = "The number should be greater than 0")
     private Integer initialQuantity;
+    private BigDecimal pricePerUnit;
 }

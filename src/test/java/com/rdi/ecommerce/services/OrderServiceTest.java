@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+
 import static com.rdi.ecommerce.enums.Category.ELECTRONIC;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.in;
@@ -21,6 +23,7 @@ public class OrderServiceTest {
     private ProductService productService;
     @Autowired
     private BuyerService buyerService;
+    @Autowired
     private CartService cartService;
     @Autowired
     private CartItemService cartItemService;
@@ -46,6 +49,7 @@ public class OrderServiceTest {
         productRequest.setProductCategory(ELECTRONIC);
         productRequest.setProductDescription("Flat scree 50 inc Lg TV");
         Integer productInitialQuantity = 50;
+        productRequest.setPricePerUnit(BigDecimal.valueOf(200_000));
         productRequest.setInitialQuantity(productInitialQuantity);
         productRequest.setMerchantId(merchantRegisterResponse.getId());
         ProductResponse productResponse = productService.addProduct(productRequest);
@@ -59,16 +63,21 @@ public class OrderServiceTest {
         CartRequest cartRequest = new CartRequest();
         cartRequest.setBuyerId(buyerRegisterResponse.getId());
         CartResponse cartResponse = cartService.createCart(cartRequest);
+        assertThat(cartResponse).isNotNull();
         AddToCartRequest addToCartRequest = new AddToCartRequest();
         addToCartRequest.setProductId(productResponse.getId());
         addToCartRequest.setBuyerId(buyerRegisterResponse.getId());
         ApiResponse<?> response = cartItemService.addCartItem(addToCartRequest);
+        assertThat(response).isNotNull();
+        ApiResponse<?> response2 = cartItemService.addCartItem(addToCartRequest);
+        assertThat(response2).isNotNull();
 
         InitialisePaymentRequest initialisePaymentRequest = new InitialisePaymentRequest();
         initialisePaymentRequest.setBuyerId(buyerRegisterResponse.getId());
         initialisePaymentRequest.setCartId(cartResponse.getId());
 
         PaymentResponse paymentResponse = orderService.initialisePayment(buyerRegisterResponse.getId());
+
 
         assertThat(paymentResponse).isNotNull();
         log.info("{}", paymentResponse);
