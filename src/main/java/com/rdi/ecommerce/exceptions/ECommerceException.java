@@ -11,6 +11,11 @@ public class ECommerceException extends Throwable {
         this.httpStatus = httpStatus;
     }
 
+    public ECommerceException(String message) {
+        super(message);
+        this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
+
     public ECommerceException(Throwable throwable) {
         super(throwable);
     }
