@@ -5,6 +5,8 @@ import com.rdi.ecommerce.data.model.Product;
 import com.rdi.ecommerce.data.model.ProductInventory;
 import com.rdi.ecommerce.data.model.Store;
 import com.rdi.ecommerce.data.repository.ProductRepository;
+import com.rdi.ecommerce.dto.GetAllProductRequest;
+import com.rdi.ecommerce.dto.GetAllProductsResponse;
 import com.rdi.ecommerce.dto.ProductRequest;
 import com.rdi.ecommerce.dto.ProductResponse;
 import com.rdi.ecommerce.exceptions.MerchantNotFoundException;
@@ -14,7 +16,12 @@ import com.rdi.ecommerce.services.ProductService;
 import com.rdi.ecommerce.services.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +40,7 @@ public class ECommerceProductService implements ProductService {
         Store merchantStore = foundMerchant.getStore();
         Product product = new Product();
         product.setProductName(productRequest.getProductName());
-        product.setProductDescription(product.getProductDescription());
+        product.setProductDescription(productRequest.getProductDescription());
         product.setProductCategory(productRequest.getProductCategory());
         product.setStore(merchantStore);
         ProductInventory productInventory = new ProductInventory();
@@ -51,6 +58,24 @@ public class ECommerceProductService implements ProductService {
                 new ProductNotFoundException(
                         String.format("Product with the id %d does not exist", productId)
                 ));
+    }
+
+    @Override
+    public List<GetAllProductsResponse> getAllProducts(GetAllProductRequest getAllProductRequest) {
+        Pageable pageable = PageRequest.of(getAllProductRequest.getPageNumber() - 1, getAllProductRequest.getPageSize());
+        Page<Product> productPage = productRepository.findAll(pageable);
+        List<Product> productList = productPage.getContent();
+        return productList.stream().map(product -> {
+            GetAllProductsResponse getAllProductsResponse = new GetAllProductsResponse();
+            getAllProductsResponse.setProductName(product.getProductName());
+            getAllProductsResponse.setId(product.getId());
+            getAllProductsResponse.setShopName(product.getStore().getStoreName());
+            getAllProductsResponse.setDescription(product.getProductDescription());
+            getAllProductsResponse.setProductCategory(product.getProductCategory());
+            getAllProductsResponse.setProductPicture(product.getProductPicture());
+            getAllProductsResponse.setPricePerUnit(product.getPricePerUnit());
+            return getAllProductsResponse;
+        }).toList();
     }
 
 }

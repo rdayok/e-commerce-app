@@ -20,6 +20,6 @@ public class Cart {
     private Long id;
     @OneToOne(cascade = DETACH)
     private Buyer buyer;
-//    @OneToMany(fetch = FetchType.EAGER, cascade = ALL)
+//    @OneToMany(fetch = FetchType.EAGER, cascade = DETACH)
 //    private List<CartItem> cartItems;
 }

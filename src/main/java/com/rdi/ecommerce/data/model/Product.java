@@ -28,6 +28,7 @@ public class Product {
     @OneToOne(cascade = CascadeType.ALL)
     private ProductInventory productInventory;
     private BigDecimal pricePerUnit;
+    private String productPicture;
     private LocalDateTime dateProductWasAdded;
 
     @PrePersist
