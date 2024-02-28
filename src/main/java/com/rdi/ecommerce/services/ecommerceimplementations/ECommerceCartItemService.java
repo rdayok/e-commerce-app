@@ -75,4 +75,9 @@ public class ECommerceCartItemService implements CartItemService {
     public List<CartItem> findAllCartItemBuyCartId(Long cartId) {
          return cartItemRepository.findAllByCartId(cartId);
     }
+
+    @Override
+    public void clearCartItemsFromCart(List<CartItem> cartItems) {
+        cartItemRepository.deleteAll(cartItems);
+    }
 }

@@ -25,4 +25,6 @@ public class BuyerOrder {
     private PaymentReceipt paymentReceipt;
     @OneToOne(cascade = DETACH)
     private Buyer buyer;
+    @OneToOne(cascade = DETACH)
+    private Address deliveryAddress;
 }

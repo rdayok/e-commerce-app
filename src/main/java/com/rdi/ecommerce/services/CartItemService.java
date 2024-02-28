@@ -18,4 +18,6 @@ public interface CartItemService {
             ProductNotFoundException, ProductInventoryNotFoundException, CannotTakeOutCartItemThatDoesNotExistInYOurCartException;
 
     List<CartItem> findAllCartItemBuyCartId(Long cartId);
+
+    void clearCartItemsFromCart(List<CartItem> cartItems);
 }
