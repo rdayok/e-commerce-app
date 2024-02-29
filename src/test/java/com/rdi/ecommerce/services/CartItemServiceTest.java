@@ -30,7 +30,7 @@ public class CartItemServiceTest {
 
     @Test
     public void testAddCartItem() throws
-            StoreNotFoundException, MerchantNotFoundException,
+            MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, BuyerNotFoundException,
             ProductNotFoundException, ProductInventoryNotFoundException {
 
@@ -72,7 +72,7 @@ public class CartItemServiceTest {
 
     @Test
     public void testRemoveCartItem() throws
-            StoreNotFoundException, MerchantNotFoundException,
+            MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, BuyerNotFoundException,
             ProductNotFoundException, ProductInventoryNotFoundException, CannotTakeOutCartItemThatDoesNotExistInYOurCartException {
 
@@ -115,7 +115,7 @@ public class CartItemServiceTest {
 
     @Test
     public void testFindAllCartItemByCartId() throws
-            StoreNotFoundException, MerchantNotFoundException,
+            MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, BuyerNotFoundException,
             ProductNotFoundException, ProductInventoryNotFoundException {
 

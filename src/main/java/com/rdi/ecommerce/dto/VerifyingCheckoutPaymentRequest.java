@@ -1,4 +1,4 @@
-package com.rdi.ecommerce.services;
+package com.rdi.ecommerce.dto;
 
 import lombok.Getter;
 import lombok.Setter;

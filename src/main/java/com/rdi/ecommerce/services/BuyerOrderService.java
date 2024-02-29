@@ -1,6 +1,7 @@
 package com.rdi.ecommerce.services;
 
 import com.rdi.ecommerce.dto.CheckOutResponse;
+import com.rdi.ecommerce.dto.VerifyingCheckoutPaymentRequest;
 import com.rdi.ecommerce.exceptions.BuyerCannotVerifyPaymentOfBuyerOrderNotTheirsException;
 import com.rdi.ecommerce.exceptions.BuyerNotFoundException;
 import com.rdi.ecommerce.exceptions.BuyerOrderNotFoundException;

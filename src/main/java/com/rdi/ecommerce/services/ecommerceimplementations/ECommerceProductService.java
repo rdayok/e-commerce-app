@@ -13,7 +13,6 @@ import com.rdi.ecommerce.exceptions.MerchantNotFoundException;
 import com.rdi.ecommerce.exceptions.ProductNotFoundException;
 import com.rdi.ecommerce.services.MerchantService;
 import com.rdi.ecommerce.services.ProductService;
-import com.rdi.ecommerce.services.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -29,7 +28,6 @@ public class ECommerceProductService implements ProductService {
 
     private final MerchantService merchantService;
     private final ModelMapper modelMapper;
-    private final StoreService storeService;
     private final ProductRepository productRepository;
 
     @Override

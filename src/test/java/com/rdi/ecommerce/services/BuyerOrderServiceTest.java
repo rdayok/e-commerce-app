@@ -32,7 +32,7 @@ public class BuyerOrderServiceTest {
 
     @Test
     public void testCheckOut() throws
-            StoreNotFoundException, MerchantNotFoundException,
+            MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, BuyerNotFoundException,
             ProductNotFoundException, ProductInventoryNotFoundException
     {
@@ -83,8 +83,9 @@ public class BuyerOrderServiceTest {
     @Test
     public void testVerifyingPaymentAtCheckout() throws
             BuyerNotFoundException, ProductNotFoundException,
-            ProductInventoryNotFoundException, StoreNotFoundException,
-            MerchantNotFoundException, MerchantIsNotOwnerOfStoreException, BuyerOrderNotFoundException, BuyerCannotVerifyPaymentOfBuyerOrderNotTheirsException {
+            ProductInventoryNotFoundException, MerchantNotFoundException,
+            MerchantIsNotOwnerOfStoreException, BuyerOrderNotFoundException,
+            BuyerCannotVerifyPaymentOfBuyerOrderNotTheirsException {
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
         userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
         userRegisterRequestForMerchant.setPassword("secretekey");

@@ -5,7 +5,6 @@ import com.rdi.ecommerce.dto.*;
 import com.rdi.ecommerce.exceptions.MerchantIsNotOwnerOfStoreException;
 import com.rdi.ecommerce.exceptions.MerchantNotFoundException;
 import com.rdi.ecommerce.exceptions.ProductNotFoundException;
-import com.rdi.ecommerce.exceptions.StoreNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class ProductServiceTest {
     private ProductService productService;
 
     @Test
-    public void testAddProductToStore() throws MerchantNotFoundException, StoreNotFoundException, MerchantIsNotOwnerOfStoreException {
+    public void testAddProductToStore() throws MerchantNotFoundException, MerchantIsNotOwnerOfStoreException {
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
         userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
         userRegisterRequestForMerchant.setPassword("secretekey");
@@ -50,9 +49,9 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testAddTwoProductToStore() throws MerchantNotFoundException, StoreNotFoundException, MerchantIsNotOwnerOfStoreException {
+    public void testAddTwoProductToStore() throws MerchantNotFoundException, MerchantIsNotOwnerOfStoreException {
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
-        userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
+        userRegisterRequestForMerchant.setEmail("dayr@gmail.com");
         userRegisterRequestForMerchant.setPassword("secretekey");
         MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
         merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
@@ -80,9 +79,9 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testGetProductById() throws MerchantNotFoundException, StoreNotFoundException, ProductNotFoundException, MerchantIsNotOwnerOfStoreException, ProductNotFoundException {
+    public void testGetProductById() throws MerchantNotFoundException, MerchantIsNotOwnerOfStoreException, ProductNotFoundException {
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
-        userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
+        userRegisterRequestForMerchant.setEmail("max_ret@yahoo.com");
         userRegisterRequestForMerchant.setPassword("secretekey");
         MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
         merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
@@ -100,13 +99,12 @@ public class ProductServiceTest {
         Product gottenProduct = productService.getProductBy(productId);
 
         assertThat(gottenProduct).isNotNull();
-        log.info("{}", gottenProduct);
     }
 
     @Test
-    public void testGetAllProducts() throws StoreNotFoundException, MerchantNotFoundException, MerchantIsNotOwnerOfStoreException {
+    public void testGetAllProducts() throws MerchantNotFoundException, MerchantIsNotOwnerOfStoreException {
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
-        userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
+        userRegisterRequestForMerchant.setEmail("retnaadayok@gmail.com");
         userRegisterRequestForMerchant.setPassword("secretekey");
         MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
         merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);

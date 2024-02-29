@@ -25,7 +25,7 @@ public class InventoryServiceTest {
 
     @Test
     public void testReserveProductByProductInventoryId() throws
-            StoreNotFoundException, MerchantNotFoundException,
+            MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, ProductNotFoundException, ProductInventoryNotFoundException {
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
         userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
@@ -57,7 +57,7 @@ public class InventoryServiceTest {
 
     @Test
     public void testReturnReserveProductByProductInventoryId() throws
-            StoreNotFoundException, MerchantNotFoundException,
+            MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, ProductNotFoundException, ProductInventoryNotFoundException {
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
         userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
@@ -89,7 +89,7 @@ public class InventoryServiceTest {
 
     @Test
     public void testRestockingA_Product() throws
-            StoreNotFoundException, MerchantNotFoundException,
+            MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, ProductNotFoundException, CannotRestockAnotherMerchantProduct {
 
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
