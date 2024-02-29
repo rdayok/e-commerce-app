@@ -4,13 +4,16 @@ import com.rdi.ecommerce.data.model.CartItem;
 import com.rdi.ecommerce.dto.*;
 import com.rdi.ecommerce.exceptions.*;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.rdi.ecommerce.enums.Category.ELECTRONIC;
+import static com.rdi.ecommerce.services.CloudServiceTest.getTestFile;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
@@ -27,91 +30,67 @@ public class CartItemServiceTest {
     private ProductService productService;
     @Autowired
     private CartItemService cartItemService;
+    private ProductRequest productRequest;
 
-    @Test
-    public void testAddCartItem() throws
-            MerchantNotFoundException,
-            MerchantIsNotOwnerOfStoreException, BuyerNotFoundException,
-            ProductNotFoundException, ProductInventoryNotFoundException, MediaUploadException {
 
-        UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
-        userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
-        userRegisterRequestForMerchant.setPassword("secretekey");
-        MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
-        merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
-        merchantRegisterRequest.setStoreName("wadrobe");
-        MerchantRegisterResponse merchantRegisterResponse = merchantService.register(merchantRegisterRequest);
-        ProductRequest productRequest = new ProductRequest();
+    @BeforeEach
+    public void setUp() {
+        productRequest = new ProductRequest();
         productRequest.setProductName("TV");
         productRequest.setProductCategory(ELECTRONIC);
         productRequest.setProductDescription("Flat scree 50 inc Lg TV");
-        Integer productInitialQuantity = 50;
-        productRequest.setInitialQuantity(productInitialQuantity);
+        productRequest.setInitialQuantity(5);
+        productRequest.setProductPicture(getTestFile());
+        productRequest.setPricePerUnit(BigDecimal.valueOf(50000));
+    }
+
+    @Test
+    public void testAddCartItem() throws
+            MerchantNotFoundException, MerchantIsNotOwnerOfStoreException,
+            BuyerNotFoundException, ProductNotFoundException,
+            ProductInventoryNotFoundException, MediaUploadException
+    {
+        MerchantRegisterResponse merchantRegisterResponse = registerMerchant("dayokr@gmail.com");
         productRequest.setMerchantId(merchantRegisterResponse.getId());
         ProductResponse productResponse = productService.addProduct(productRequest);
-        UserRegisterRequest userRegisterRequestForBuyer = new UserRegisterRequest();
-        userRegisterRequestForBuyer.setEmail("max_ret@yahoo.com");
-        userRegisterRequestForBuyer.setPassword("secretekey");
-        BuyerRegisterRequest buyerRegisterRequest = new BuyerRegisterRequest();
-        buyerRegisterRequest.setUserRegisterRequest(userRegisterRequestForBuyer);
-        buyerRegisterRequest.setPhoneNumber("07031005737");
-        BuyerRegisterResponse buyerRegisterResponse = buyerService.register(buyerRegisterRequest);
-        CartRequest cartRequest = new CartRequest();
-        cartRequest.setBuyerId(buyerRegisterResponse.getId());
-        CartResponse cartResponse = cartService.createCart(cartRequest);
+        assertThat(productResponse).isNotNull();
+        BuyerRegisterResponse buyerRegisterResponse = registerBuyer("max_ret@yahoo.com");
+        assertThat(buyerRegisterResponse).isNotNull();
+        createCart(buyerRegisterResponse);
 
-
-        AddToCartRequest addToCartRequest = new AddToCartRequest();
-        addToCartRequest.setProductId(productResponse.getId());
-        addToCartRequest.setBuyerId(buyerRegisterResponse.getId());
+        AddToCartRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
         ApiResponse<?> response = cartItemService.addCartItem(addToCartRequest);
 
         assertThat(response).isNotNull();
         log.info("{}", response);
     }
 
+
+
     @Test
     public void testRemoveCartItem() throws
-            MerchantNotFoundException,
-            MerchantIsNotOwnerOfStoreException, BuyerNotFoundException,
-            ProductNotFoundException, ProductInventoryNotFoundException, CannotTakeOutCartItemThatDoesNotExistInYOurCartException, MediaUploadException {
-
-        UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
-        userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
-        userRegisterRequestForMerchant.setPassword("secretekey");
-        MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
-        merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
-        merchantRegisterRequest.setStoreName("wadrobe");
-        MerchantRegisterResponse merchantRegisterResponse = merchantService.register(merchantRegisterRequest);
-        ProductRequest productRequest = new ProductRequest();
-        productRequest.setProductName("TV");
-        productRequest.setProductCategory(ELECTRONIC);
-        productRequest.setProductDescription("Flat scree 50 inc Lg TV");
-        Integer productInitialQuantity = 50;
-        productRequest.setInitialQuantity(productInitialQuantity);
+            MerchantNotFoundException, MerchantIsNotOwnerOfStoreException,
+            BuyerNotFoundException, ProductNotFoundException, ProductInventoryNotFoundException,
+            CannotTakeOutCartItemThatDoesNotExistInYOurCartException, MediaUploadException
+    {
+        MerchantRegisterResponse merchantRegisterResponse = registerMerchant("dayokffssr@gmail.com");
         productRequest.setMerchantId(merchantRegisterResponse.getId());
         ProductResponse productResponse = productService.addProduct(productRequest);
-        UserRegisterRequest userRegisterRequestForBuyer = new UserRegisterRequest();
-        userRegisterRequestForBuyer.setEmail("max_ret@yahoo.com");
-        userRegisterRequestForBuyer.setPassword("secretekey");
-        BuyerRegisterRequest buyerRegisterRequest = new BuyerRegisterRequest();
-        buyerRegisterRequest.setUserRegisterRequest(userRegisterRequestForBuyer);
-        buyerRegisterRequest.setPhoneNumber("07031005737");
-        BuyerRegisterResponse buyerRegisterResponse = buyerService.register(buyerRegisterRequest);
-        CartRequest cartRequest = new CartRequest();
-        cartRequest.setBuyerId(buyerRegisterResponse.getId());
-        CartResponse cartResponse = cartService.createCart(cartRequest);
+        assertThat(productResponse).isNotNull();
+        BuyerRegisterResponse buyerRegisterResponse = registerBuyer("maxret@yahoo.com");
+        assertThat(buyerRegisterResponse).isNotNull();
+        createCart(buyerRegisterResponse);
+        AddToCartRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
+        ApiResponse<?> addToCartResponse = cartItemService.addCartItem(addToCartRequest);
+        assertThat(addToCartResponse).isNotNull();
 
+        ApiResponse<?> removeCartItemResponse = cartItemService.removeCartItem(addToCartRequest);
 
-        AddToCartRequest addToCartRequest = new AddToCartRequest();
-        addToCartRequest.setProductId(productResponse.getId());
-        addToCartRequest.setBuyerId(buyerRegisterResponse.getId());
-        cartItemService.addCartItem(addToCartRequest);
-        ApiResponse<?> response = cartItemService.removeCartItem(addToCartRequest);
-
-        assertThat(response).isNotNull();
-        log.info("{}", response);
+        assertThat(removeCartItemResponse).isNotNull();
+        log.info("{}", removeCartItemResponse);
     }
+
+
 
     @Test
     public void testFindAllCartItemByCartId() throws
@@ -119,51 +98,65 @@ public class CartItemServiceTest {
             MerchantIsNotOwnerOfStoreException, BuyerNotFoundException,
             ProductNotFoundException, ProductInventoryNotFoundException, MediaUploadException {
 
-        UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
-        userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
-        userRegisterRequestForMerchant.setPassword("secretekey");
-        MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
-        merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
-        merchantRegisterRequest.setStoreName("wadrobe");
-        MerchantRegisterResponse merchantRegisterResponse = merchantService.register(merchantRegisterRequest);
-        ProductRequest productRequest = new ProductRequest();
-        productRequest.setProductName("TV");
-        productRequest.setProductCategory(ELECTRONIC);
-        productRequest.setProductDescription("Flat scree 50 inc Lg TV");
-        Integer productInitialQuantity = 30;
-        productRequest.setInitialQuantity(productInitialQuantity);
+        MerchantRegisterResponse merchantRegisterResponse = registerMerchant("dayok@gmail.com");
         productRequest.setMerchantId(merchantRegisterResponse.getId());
         ProductResponse productResponse = productService.addProduct(productRequest);
-        ProductRequest productRequest2 = new ProductRequest();
-        productRequest2.setProductName("Sound Bar");
-        productRequest2.setProductCategory(ELECTRONIC);
-        productRequest2.setProductDescription("A black 180W bluetoth sound bar with wofer");
+        assertThat(productResponse).isNotNull();
+        productRequest.setProductName("Sound Bar");
+        productRequest.setProductCategory(ELECTRONIC);
+        productRequest.setProductDescription("A black 180W bluetoth sound bar with wofer");
         Integer productInitialQuantity2 = 50;
-        productRequest2.setInitialQuantity(productInitialQuantity2);
-        productRequest2.setMerchantId(merchantRegisterResponse.getId());
-        ProductResponse productResponse2 = productService.addProduct(productRequest2);
-        UserRegisterRequest userRegisterRequestForBuyer = new UserRegisterRequest();
-        userRegisterRequestForBuyer.setEmail("max_ret@yahoo.com");
-        userRegisterRequestForBuyer.setPassword("secretekey");
-        BuyerRegisterRequest buyerRegisterRequest = new BuyerRegisterRequest();
-        buyerRegisterRequest.setUserRegisterRequest(userRegisterRequestForBuyer);
-        buyerRegisterRequest.setPhoneNumber("07031005737");
-        BuyerRegisterResponse buyerRegisterResponse = buyerService.register(buyerRegisterRequest);
-        CartRequest cartRequest = new CartRequest();
-        cartRequest.setBuyerId(buyerRegisterResponse.getId());
-        CartResponse cartResponse = cartService.createCart(cartRequest);
-        AddToCartRequest addToCartRequest = new AddToCartRequest();
-        addToCartRequest.setProductId(productResponse.getId());
-        addToCartRequest.setBuyerId(buyerRegisterResponse.getId());
+        productRequest.setInitialQuantity(productInitialQuantity2);
+        productRequest.setMerchantId(merchantRegisterResponse.getId());
+        ProductResponse productResponse2 = productService.addProduct(productRequest);
+        assertThat(productResponse).isNotNull();
+        BuyerRegisterResponse buyerRegisterResponse = registerBuyer("ret@yahoo.com");
+        assertThat(buyerRegisterResponse).isNotNull();
+        createCart(buyerRegisterResponse);
+        AddToCartRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
         cartItemService.addCartItem(addToCartRequest);
-        AddToCartRequest addToCartRequest2 = new AddToCartRequest();
-        addToCartRequest2.setProductId(productResponse2.getId());
-        addToCartRequest2.setBuyerId(buyerRegisterResponse.getId());
+        AddToCartRequest addToCartRequest2 = getAddToCartRequest(productResponse2, buyerRegisterResponse);
         cartItemService.addCartItem(addToCartRequest2);
 
         List<CartItem> cartItemList = cartItemService.findAllCartItemBuyCartId(buyerRegisterResponse.getId());
 
         assertThat(cartItemList).isNotNull();
         log.info("{}", cartItemList);
+    }
+
+    private static AddToCartRequest getAddToCartRequest(ProductResponse productResponse, BuyerRegisterResponse buyerRegisterResponse) {
+        AddToCartRequest addToCartRequest = new AddToCartRequest();
+        addToCartRequest.setProductId(productResponse.getId());
+        addToCartRequest.setBuyerId(buyerRegisterResponse.getId());
+        return addToCartRequest;
+    }
+
+    private BuyerRegisterResponse registerBuyer(String mail) {
+        UserRegisterRequest userRegisterRequestForBuyer = new UserRegisterRequest();
+        userRegisterRequestForBuyer.setEmail(mail);
+        userRegisterRequestForBuyer.setPassword("secretekey");
+        BuyerRegisterRequest buyerRegisterRequest = new BuyerRegisterRequest();
+        buyerRegisterRequest.setUserRegisterRequest(userRegisterRequestForBuyer);
+        buyerRegisterRequest.setPhoneNumber("07031005737");
+        BuyerRegisterResponse buyerRegisterResponse = buyerService.register(buyerRegisterRequest);
+        return buyerRegisterResponse;
+    }
+
+    private void createCart(BuyerRegisterResponse buyerRegisterResponse) throws BuyerNotFoundException {
+        CartRequest cartRequest = new CartRequest();
+        cartRequest.setBuyerId(buyerRegisterResponse.getId());
+        CartResponse cartResponse = cartService.createCart(cartRequest);
+    }
+
+    private MerchantRegisterResponse registerMerchant(String mail) {
+        UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
+        userRegisterRequestForMerchant.setEmail(mail);
+        userRegisterRequestForMerchant.setPassword("secretekey");
+        MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
+        merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
+        merchantRegisterRequest.setStoreName("wadrobe");
+        MerchantRegisterResponse merchantRegisterResponse = merchantService.register(merchantRegisterRequest);
+        assertThat(merchantRegisterResponse).isNotNull();
+        return merchantRegisterResponse;
     }
 }

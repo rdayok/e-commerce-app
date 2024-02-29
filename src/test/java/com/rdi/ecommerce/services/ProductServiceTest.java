@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import static com.rdi.ecommerce.enums.Category.ELECTRONIC;
@@ -46,7 +45,8 @@ public class ProductServiceTest {
 
     @Test
     public void testAddProduct() throws MerchantNotFoundException, MerchantIsNotOwnerOfStoreException, MediaUploadException {
-        MerchantRegisterResponse merchantRegisterResponse = getMerchantRegisterResponse("dayokr@gmail.com");
+        MerchantRegisterResponse merchantRegisterResponse = registerMerchant("dayokr@gmail.com");
+        assertThat(merchantRegisterResponse).isNotNull();
 
         productRequest.setMerchantId(merchantRegisterResponse.getId());
         ProductResponse productResponse = productService.addProduct(productRequest);
@@ -57,7 +57,8 @@ public class ProductServiceTest {
 
     @Test
     public void testAddTwoProducts() throws MerchantNotFoundException, MerchantIsNotOwnerOfStoreException, MediaUploadException {
-        MerchantRegisterResponse merchantRegisterResponse = getMerchantRegisterResponse("retnaamaxwelldayok@gmail.com");
+        MerchantRegisterResponse merchantRegisterResponse = registerMerchant("retnaamaxwelldayok@gmail.com");
+        assertThat(merchantRegisterResponse).isNotNull();
 
         productRequest.setMerchantId(merchantRegisterResponse.getId());
         ProductResponse productResponse = productService.addProduct(productRequest);
@@ -77,7 +78,8 @@ public class ProductServiceTest {
 
     @Test
     public void testGetProductById() throws MerchantNotFoundException, MerchantIsNotOwnerOfStoreException, ProductNotFoundException, MediaUploadException {
-        MerchantRegisterResponse merchantRegisterResponse = getMerchantRegisterResponse("max_ret@yahoo.com");
+        MerchantRegisterResponse merchantRegisterResponse = registerMerchant("max_ret@yahoo.com");
+        assertThat(merchantRegisterResponse).isNotNull();
         productRequest.setMerchantId(merchantRegisterResponse.getId());
         ProductResponse productResponse = productService.addProduct(productRequest);
         assertThat(productResponse).isNotNull();
@@ -90,7 +92,8 @@ public class ProductServiceTest {
 
     @Test
     public void testGetAllProducts() throws MerchantNotFoundException, MerchantIsNotOwnerOfStoreException, MediaUploadException {
-        MerchantRegisterResponse merchantRegisterResponse = getMerchantRegisterResponse("retnaadayok@gmail.com");
+        MerchantRegisterResponse merchantRegisterResponse = registerMerchant("retnaadayok@gmail.com");
+        assertThat(merchantRegisterResponse).isNotNull();
         productRequest.setMerchantId(merchantRegisterResponse.getId());
         ProductResponse productResponse = productService.addProduct(productRequest);
         assertThat(productResponse).isNotNull();
@@ -115,7 +118,7 @@ public class ProductServiceTest {
         log.info("{}", getAllProductsResponseList);
     }
 
-    private MerchantRegisterResponse getMerchantRegisterResponse(String mail) {
+    private MerchantRegisterResponse registerMerchant(String mail) {
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
         userRegisterRequestForMerchant.setEmail(mail);
         userRegisterRequestForMerchant.setPassword("secretekey");
