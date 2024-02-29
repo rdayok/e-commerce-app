@@ -26,7 +26,7 @@ public class AddressServiceTest {
         BuyerRegisterRequest buyerRegisterRequest = new BuyerRegisterRequest();
         buyerRegisterRequest.setUserRegisterRequest(userRegisterRequest);
         buyerRegisterRequest.setPhoneNumber("07031005737");
-        BuyerRegisterResponse buyerRegisterResponse = buyerService.register(buyerRegisterRequest);
+        BuyerRegisterResponse buyerRegisterResponse = buyerService.registerBuyer(buyerRegisterRequest);
         BuyerAddressAddRequest buyerAddressAddRequest = new BuyerAddressAddRequest();
         buyerAddressAddRequest.setBuildingNumber(2L);
         buyerAddressAddRequest.setStreet("Du");

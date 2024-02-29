@@ -59,7 +59,7 @@ public class BuyerOrderServiceTest {
         BuyerRegisterRequest buyerRegisterRequest = new BuyerRegisterRequest();
         buyerRegisterRequest.setUserRegisterRequest(userRegisterRequestForBuyer);
         buyerRegisterRequest.setPhoneNumber("07031005737");
-        BuyerRegisterResponse buyerRegisterResponse = buyerService.register(buyerRegisterRequest);
+        BuyerRegisterResponse buyerRegisterResponse = buyerService.registerBuyer(buyerRegisterRequest);
 
         CartRequest cartRequest = new CartRequest();
         cartRequest.setBuyerId(buyerRegisterResponse.getId());
@@ -109,7 +109,7 @@ public class BuyerOrderServiceTest {
         BuyerRegisterRequest buyerRegisterRequest = new BuyerRegisterRequest();
         buyerRegisterRequest.setUserRegisterRequest(userRegisterRequestForBuyer);
         buyerRegisterRequest.setPhoneNumber("07031005737");
-        BuyerRegisterResponse buyerRegisterResponse = buyerService.register(buyerRegisterRequest);
+        BuyerRegisterResponse buyerRegisterResponse = buyerService.registerBuyer(buyerRegisterRequest);
 
         CartRequest cartRequest = new CartRequest();
         cartRequest.setBuyerId(buyerRegisterResponse.getId());

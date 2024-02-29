@@ -23,15 +23,20 @@ public class ECommerceBuyerService implements BuyerService {
     private final ModelMapper modelMapper;
     private final BuyerRepository buyerRepository;
     @Override
-    public BuyerRegisterResponse register(BuyerRegisterRequest buyerRegisterRequest) {
+    public BuyerRegisterResponse registerBuyer(BuyerRegisterRequest buyerRegisterRequest) {
         UserRegisterRequest userRegisterRequest = buyerRegisterRequest.getUserRegisterRequest();
         User user = modelMapper.map(userRegisterRequest, User.class);
+        Buyer registeredBuyer = setBuyerData(buyerRegisterRequest, user);
+        return modelMapper.map(registeredBuyer, BuyerRegisterResponse.class);
+    }
+
+    private Buyer setBuyerData(BuyerRegisterRequest buyerRegisterRequest, User user) {
         user.setRole(BUYER);
         Buyer buyer = new Buyer();
         buyer.setUser(user);
         buyer.setPhoneNumber(buyerRegisterRequest.getPhoneNumber());
         Buyer registeredBuyer = buyerRepository.save(buyer);
-        return modelMapper.map(registeredBuyer, BuyerRegisterResponse.class);
+        return registeredBuyer;
     }
 
     @Override

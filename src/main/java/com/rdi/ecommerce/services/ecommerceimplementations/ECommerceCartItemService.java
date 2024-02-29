@@ -4,7 +4,6 @@ import com.rdi.ecommerce.data.model.*;
 import com.rdi.ecommerce.data.repository.CartItemRepository;
 import com.rdi.ecommerce.dto.AddToCartRequest;
 import com.rdi.ecommerce.dto.ApiResponse;
-import com.rdi.ecommerce.exceptions.BuyerNotFoundException;
 import com.rdi.ecommerce.exceptions.CannotTakeOutCartItemThatDoesNotExistInYOurCartException;
 import com.rdi.ecommerce.exceptions.ProductInventoryNotFoundException;
 import com.rdi.ecommerce.exceptions.ProductNotFoundException;
@@ -28,48 +27,74 @@ public class ECommerceCartItemService implements CartItemService {
     @Override
     @Transactional
     public ApiResponse<?> addCartItem(AddToCartRequest addToCartRequest) throws
-            ProductNotFoundException, ProductInventoryNotFoundException, BuyerNotFoundException {
-
+            ProductNotFoundException, ProductInventoryNotFoundException {
         Long productId = addToCartRequest.getProductId();
         Long buyerId = addToCartRequest.getBuyerId();
         Product gottenProduct = productService.getProductBy(productId);
+        recordReserveInInventory(gottenProduct);
+        CartItem foundCartItem = createCartItemIfItDoesNotExist(productId, gottenProduct, buyerId);
+        CartItem savedCart = cartItemRepository.save(foundCartItem);
+        return new ApiResponse<>("SUCCESSFUL");
+    }
+
+    private void recordReserveInInventory(Product gottenProduct) throws ProductInventoryNotFoundException {
         ProductInventory productInventory = gottenProduct.getProductInventory();
         Long productInventoryId = productInventory.getId();
-        ApiResponse<?> reservationResponse = inventoryService.reserveProductBy(productInventoryId);
+        inventoryService.reserveProductBy(productInventoryId);
+    }
+
+    private CartItem createCartItemIfItDoesNotExist(Long productId, Product gottenProduct, Long buyerId) {
         Cart foundCart = cartService.findByBuyerId(buyerId);
         Long cartId = foundCart.getId();
         CartItem foundCartItem = cartItemRepository.findByProductIdAndCartId(productId, cartId);
         if(foundCartItem == null){
-            foundCartItem = new CartItem();
-            foundCartItem.increaseItemQuantity();
-            foundCartItem.setProduct(gottenProduct);
-            foundCartItem.setCart(foundCart);
+            foundCartItem = createNewCartItem(gottenProduct, foundCart);
         }else foundCartItem.increaseItemQuantity();
-        CartItem savedCart = cartItemRepository.save(foundCartItem);
-        return new ApiResponse<>("SUCCESSFUL");
+        return foundCartItem;
+    }
+
+    private static CartItem createNewCartItem(Product gottenProduct, Cart foundCart) {
+        CartItem foundCartItem;
+        foundCartItem = new CartItem();
+        foundCartItem.increaseItemQuantity();
+        foundCartItem.setProduct(gottenProduct);
+        foundCartItem.setCart(foundCart);
+        return foundCartItem;
     }
 
     @Override
     @Transactional
     public ApiResponse<?> removeCartItem(AddToCartRequest addToCartRequest) throws
-            ProductNotFoundException, ProductInventoryNotFoundException, CannotTakeOutCartItemThatDoesNotExistInYOurCartException {
-
+            ProductNotFoundException, ProductInventoryNotFoundException, 
+            CannotTakeOutCartItemThatDoesNotExistInYOurCartException {
         Long productId = addToCartRequest.getProductId();
         Long buyerId = addToCartRequest.getBuyerId();
-        Product gottenProduct = productService.getProductBy(productId);
-        ProductInventory productInventory = gottenProduct.getProductInventory();
-        Long productInventoryId = productInventory.getId();
-        ApiResponse<?> reservationResponse = inventoryService.returnReserveProductBy(productInventoryId);
-        Cart foundCart = cartService.findByBuyerId(buyerId);
-        Long cartId = foundCart.getId();
-        CartItem foundCartItem = cartItemRepository.findByProductIdAndCartId(productId, cartId);
-        if(foundCartItem == null) throw new CannotTakeOutCartItemThatDoesNotExistInYOurCartException(
-                    "You cannot reduce item that is not in your cart"
-            );
+        CartItem foundCartItem = checkIfCartItemExist(buyerId, productId);
+        recordReturnInInventory(productId);
         foundCartItem.decreaseItemQuantity();
         CartItem savedCart = cartItemRepository.save(foundCartItem);
         return new ApiResponse<>("SUCCESSFUL");
     }
+
+    private CartItem checkIfCartItemExist(Long buyerId, Long productId) throws 
+            CannotTakeOutCartItemThatDoesNotExistInYOurCartException {
+        Cart foundCart = cartService.findByBuyerId(buyerId);
+        Long cartId = foundCart.getId();
+        CartItem foundCartItem = cartItemRepository.findByProductIdAndCartId(productId, cartId);
+        if(foundCartItem == null) throw new CannotTakeOutCartItemThatDoesNotExistInYOurCartException(
+                "You cannot reduce item that is not in your cart"
+        );
+        return foundCartItem;
+    }
+
+    private void recordReturnInInventory(Long productId) throws ProductNotFoundException, ProductInventoryNotFoundException {
+        Product gottenProduct = productService.getProductBy(productId);
+        ProductInventory productInventory = gottenProduct.getProductInventory();
+        Long productInventoryId = productInventory.getId();
+        ApiResponse<?> reservationResponse = inventoryService.returnReserveProductBy(productInventoryId);
+    }
+
+
 
     @Override
     public List<CartItem> findAllCartItemBuyCartId(Long cartId) {

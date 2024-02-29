@@ -6,7 +6,7 @@ import com.rdi.ecommerce.dto.BuyerRegisterResponse;
 import com.rdi.ecommerce.exceptions.BuyerNotFoundException;
 
 public interface BuyerService {
-    BuyerRegisterResponse register(BuyerRegisterRequest buyerRegisterRequest);
+    BuyerRegisterResponse registerBuyer(BuyerRegisterRequest buyerRegisterRequest);
 
     Buyer getBuyerBy(Long buyerId) throws BuyerNotFoundException;
 }

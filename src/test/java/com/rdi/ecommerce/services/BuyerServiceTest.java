@@ -21,14 +21,7 @@ public class BuyerServiceTest {
 
     @Test
     public void testRegisterBuyer() {
-        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
-        userRegisterRequest.setEmail("dayokr@gmail.com");
-        userRegisterRequest.setPassword("secretekey");
-        BuyerRegisterRequest buyerRegisterRequest = new BuyerRegisterRequest();
-        buyerRegisterRequest.setUserRegisterRequest(userRegisterRequest);
-        buyerRegisterRequest.setPhoneNumber("07031005737");
-
-        BuyerRegisterResponse buyerRegisterResponse = buyerService.register(buyerRegisterRequest);
+        BuyerRegisterResponse buyerRegisterResponse = registerBuyer("dayokr@gmail.com");
 
         assertThat(buyerRegisterResponse).isNotNull();
         log.info("{}", buyerRegisterResponse);
@@ -36,17 +29,23 @@ public class BuyerServiceTest {
 
     @Test
     public void testGetBuyerById() throws BuyerNotFoundException {
-        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
-        userRegisterRequest.setEmail("dayokr@gmail.com");
-        userRegisterRequest.setPassword("secretekey");
-        BuyerRegisterRequest buyerRegisterRequest = new BuyerRegisterRequest();
-        buyerRegisterRequest.setUserRegisterRequest(userRegisterRequest);
-        buyerRegisterRequest.setPhoneNumber("07031005737");
-        BuyerRegisterResponse buyerRegisterResponse = buyerService.register(buyerRegisterRequest);
+        BuyerRegisterResponse buyerRegisterResponse = registerBuyer("max_ret@yahoo.com");
+        assertThat(buyerRegisterResponse).isNotNull();
 
         Buyer buyer = buyerService.getBuyerBy(buyerRegisterResponse.getId());
 
         assertThat(buyer).isNotNull();
         log.info("{}", buyer);
+    }
+
+    private BuyerRegisterResponse registerBuyer(String mail) {
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setEmail(mail);
+        userRegisterRequest.setPassword("secretekey");
+        BuyerRegisterRequest buyerRegisterRequest = new BuyerRegisterRequest();
+        buyerRegisterRequest.setUserRegisterRequest(userRegisterRequest);
+        buyerRegisterRequest.setPhoneNumber("07031005737");
+        BuyerRegisterResponse buyerRegisterResponse = buyerService.registerBuyer(buyerRegisterRequest);
+        return buyerRegisterResponse;
     }
 }
