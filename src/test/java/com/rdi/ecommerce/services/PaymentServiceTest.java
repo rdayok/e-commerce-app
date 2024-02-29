@@ -4,6 +4,7 @@ import com.rdi.ecommerce.dto.PaymentRequest;
 import com.rdi.ecommerce.dto.PayStackPaymentResponse;
 import com.rdi.ecommerce.dto.VerifyPaymentResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,25 +19,26 @@ public class PaymentServiceTest {
 
     @Autowired
     private PaymentService paymentService;
+    private PaymentRequest paymentRequest;
+
+
+    @BeforeEach
+    public void setUp() {
+        paymentRequest = new PaymentRequest();
+        paymentRequest.setEmail("dayokr@gmail.com");
+        paymentRequest.setAmount(BigDecimal.valueOf(5000));
+    }
 
     @Test
     public void testInitialisePayment() {
-        PaymentRequest paymentRequest = new PaymentRequest();
-        paymentRequest.setEmail("dayokr@gmail.com");
-        paymentRequest.setAmount(BigDecimal.valueOf(5000));
-
         PayStackPaymentResponse paymentResponse = paymentService.initialisePayment(paymentRequest);
 
         assertThat(paymentResponse).isNotNull();
         log.info("{}", paymentResponse);
     }
 
-
     @Test
     public void testVerifyPayment() {
-        PaymentRequest paymentRequest = new PaymentRequest();
-        paymentRequest.setEmail("dayokr@gmail.com");
-        paymentRequest.setAmount(BigDecimal.valueOf(5000));
         PayStackPaymentResponse paymentResponse = paymentService.initialisePayment(paymentRequest);
         assertThat(paymentResponse).isNotNull();
         String paymentReference = paymentResponse.getData().getReference();

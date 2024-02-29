@@ -28,4 +28,21 @@ public class UserServiceTest {
         log.info("{}", userRegisterResponse);
     }
 
+    @Test
+    public void testRegisteringTwoUsers() {
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setEmail("dayojjkr@gmail.com");
+        userRegisterRequest.setPassword("secretekey");
+        UserRegisterResponse userRegisterResponse = userService.register(userRegisterRequest);
+        UserRegisterRequest userRegisterRequest2 = new UserRegisterRequest();
+        userRegisterRequest2.setEmail("max_ret@yahoo.com");
+        userRegisterRequest2.setPassword("secretekey");
+        UserRegisterResponse userRegisterResponse2 = userService.register(userRegisterRequest2);
+
+        assertThat(userRegisterResponse).isNotNull();
+        assertThat(userRegisterRequest2).isNotNull();
+        log.info("{}", userRegisterResponse);
+        log.info("{}", userRegisterResponse2);
+    }
+
 }

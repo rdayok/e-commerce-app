@@ -27,11 +27,8 @@ public class PayStackPaymentService implements PaymentService {
     @Override
     public PayStackPaymentResponse initialisePayment(PaymentRequest paymentRequest) {
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders httpHeaders = new HttpHeaders();
         String URL = payStackConfig.getInitialisePaymentUrl();
-        httpHeaders.set("Authorization", payStackConfig.getAuthorization());
-        httpHeaders.set("Content-Type", APPLICATION_JSON_VALUE);
-        httpHeaders.set("accept", APPLICATION_JSON_VALUE);
+        HttpHeaders httpHeaders = getHttpHeadersForCloudinary();
         HttpEntity<PaymentRequest> requestHttpEntity = new RequestEntity<>(paymentRequest, httpHeaders, POST, URI.create(""));
         ResponseEntity<PayStackPaymentResponse> responseEntity = restTemplate.postForEntity(URL, requestHttpEntity, PayStackPaymentResponse.class);
         return responseEntity.getBody();
@@ -40,16 +37,21 @@ public class PayStackPaymentService implements PaymentService {
     @Override
     public VerifyPaymentResponse verifyPayment(String paymentReference) {
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.set("Authorization", payStackConfig.getAuthorization());
-        httpHeaders.set("Content-Type", APPLICATION_JSON_VALUE);
-        httpHeaders.set("accept", APPLICATION_JSON_VALUE);
+        HttpHeaders httpHeaders = getHttpHeadersForCloudinary();
         HttpEntity<Object> httpEntity = new HttpEntity<>(httpHeaders);
         RequestEntity<String> requestEntity = new RequestEntity<>(httpHeaders, GET, URI.create(""));
         String rootURL = payStackConfig.getVerifyPaymentUrl();
         String URL = String.format("%s%s", rootURL, paymentReference);
         ResponseEntity<VerifyPaymentResponse> verifyPaymentResponseResponseEntity = restTemplate.exchange(URL, GET, httpEntity, VerifyPaymentResponse.class);
         return verifyPaymentResponseResponseEntity.getBody();
+    }
+
+    private HttpHeaders getHttpHeadersForCloudinary() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("Authorization", payStackConfig.getAuthorization());
+        httpHeaders.set("Content-Type", APPLICATION_JSON_VALUE);
+        httpHeaders.set("accept", APPLICATION_JSON_VALUE);
+        return httpHeaders;
     }
 
 }
