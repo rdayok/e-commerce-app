@@ -26,16 +26,34 @@ public class ECommerceMerchantService implements MerchantService {
 
     @Override
     public MerchantRegisterResponse register(MerchantRegisterRequest merchantRegisterRequest) {
-        UserRegisterRequest userRegisterRequest = merchantRegisterRequest.getUserRegisterRequest();
-        User user = modelMapper.map(userRegisterRequest, User.class);
-        user.setRole(MERCHANT);
-        Merchant merchant = new Merchant();
-        merchant.setUser(user);
-        Store store = new Store();
-        store.setStoreName(merchantRegisterRequest.getStoreName());
-        merchant.setStore(store);
+        Merchant merchant = setMerchantData(merchantRegisterRequest);
         Merchant registeredMerchant = merchantRepository.save(merchant);
         return modelMapper.map(registeredMerchant, MerchantRegisterResponse.class);
+    }
+
+    private Merchant setMerchantData(MerchantRegisterRequest merchantRegisterRequest) {
+        UserRegisterRequest userRegisterRequest = merchantRegisterRequest.getUserRegisterRequest();
+        User user = setUserData(userRegisterRequest);
+        Merchant merchant = new Merchant();
+        merchant.setUser(user);
+        String storeName = merchantRegisterRequest.getStoreName();
+        Store store = setStoreData(storeName);
+        merchant.setStore(store);
+        return merchant;
+    }
+
+    private static Store setStoreData(String storeName) {
+        Store store = new Store();
+        store.setStoreName(storeName);
+        return store;
+    }
+
+    private static User setUserData(UserRegisterRequest userRegisterRequest) {
+        User user = new User();
+        user.setEmail(userRegisterRequest.getEmail());
+        user.setPassword(userRegisterRequest.getPassword());
+        user.setRole(MERCHANT);
+        return user;
     }
 
     @Override

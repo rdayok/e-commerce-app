@@ -21,13 +21,7 @@ public class MerchantServiceTest {
 
     @Test
     public void testRegisterMerchant() {
-        UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
-        userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
-        userRegisterRequestForMerchant.setPassword("secretekey");
-        MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
-        merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
-        merchantRegisterRequest.setStoreName("wadrobe");
-
+        MerchantRegisterRequest merchantRegisterRequest = createMerchantRegistraionRequest("dayokr@gmail.com");
         MerchantRegisterResponse merchantRegisterResponse = merchantService.register(merchantRegisterRequest);
 
         assertThat(merchantRegisterResponse).isNotNull();
@@ -36,17 +30,22 @@ public class MerchantServiceTest {
 
     @Test
     public void testGetMerchantById() throws MerchantNotFoundException {
-        UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
-        userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
-        userRegisterRequestForMerchant.setPassword("secretekey");
-        MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
-        merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
-        merchantRegisterRequest.setStoreName("wadrobe");
+        MerchantRegisterRequest merchantRegisterRequest = createMerchantRegistraionRequest("max_ret@yahoo.com");
         MerchantRegisterResponse merchantRegisterResponse = merchantService.register(merchantRegisterRequest);
 
         Long merchantId = merchantRegisterResponse.getId();
         Merchant merchant = merchantService.getMerchantBy(merchantId);
 
         assertThat(merchant).isNotNull();
+    }
+
+    private static MerchantRegisterRequest createMerchantRegistraionRequest(String mail) {
+        UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
+        userRegisterRequestForMerchant.setEmail(mail);
+        userRegisterRequestForMerchant.setPassword("secretekey");
+        MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
+        merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
+        merchantRegisterRequest.setStoreName("wadrobe");
+        return merchantRegisterRequest;
     }
 }
