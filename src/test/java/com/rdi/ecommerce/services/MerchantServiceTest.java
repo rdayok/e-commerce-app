@@ -29,7 +29,8 @@ public class MerchantServiceTest {
     }
 
     @Test
-    public void testGetMerchantById() throws MerchantNotFoundException {
+    public void testGetMerchantById() throws MerchantNotFoundException
+    {
         MerchantRegisterRequest merchantRegisterRequest = createMerchantRegistraionRequest("max_ret@yahoo.com");
         MerchantRegisterResponse merchantRegisterResponse = merchantService.register(merchantRegisterRequest);
 

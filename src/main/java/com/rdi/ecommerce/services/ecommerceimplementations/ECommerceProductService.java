@@ -50,13 +50,19 @@ public class ECommerceProductService implements ProductService {
         product.setProductDescription(productRequest.getProductDescription());
         product.setProductCategory(productRequest.getProductCategory());
         product.setStore(merchantStore);
-        ProductInventory productInventory = new ProductInventory();
-        productInventory.setAvailableQuantity(productRequest.getInitialQuantity());
+        ProductInventory productInventory = setProductInventoryData(productRequest);
         product.setProductInventory(productInventory);
         product.setPricePerUnit(productRequest.getPricePerUnit());
         String productPictureUrl = cloudService.upload(productRequest.getProductPicture());
         product.setProductPicture(productPictureUrl);
         return product;
+    }
+
+    private static ProductInventory setProductInventoryData(ProductRequest productRequest) {
+        Integer initialQuantity = productRequest.getInitialQuantity();
+        ProductInventory productInventory = new ProductInventory();
+        productInventory.setAvailableQuantity(initialQuantity);
+        return productInventory;
     }
 
 

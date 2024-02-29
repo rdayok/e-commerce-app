@@ -24,12 +24,14 @@ public class ProductInventory {
         reservedQuantity++;
     }
 
-    public void restockProduct(Integer quantityOfProductToRestock) {
-        availableQuantity += quantityOfProductToRestock;
-    }
-
     public void returnOneProduct() {
         availableQuantity++;
         reservedQuantity--;
     }
+
+    public void restockProduct(Integer quantityOfProductToRestock) {
+        availableQuantity += quantityOfProductToRestock;
+    }
+
+
 }
