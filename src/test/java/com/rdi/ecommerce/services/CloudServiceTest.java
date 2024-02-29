@@ -27,17 +27,19 @@ public class CloudServiceTest {
     
     @Test
     public void testUploadImage() throws MediaUploadException {
-        Path path = Paths.get(IMAGE_LOCATION);
-        String uploadResponse;
+        String uploadResponse = cloudService.upload(getTestFile());
+        assertNotNull(uploadResponse);
+        log.info("{}", uploadResponse);
+    }
+
+    public static MultipartFile getTestFile(){
+        Path path = Paths.get(CloudServiceTest.IMAGE_LOCATION);
         try(var inputStream = Files.newInputStream(path)) {
-            MultipartFile file = new MockMultipartFile(path.getFileName().toString(), inputStream);
-            uploadResponse = cloudService.upload(file);
+            return new MockMultipartFile(path.getFileName().toString(), inputStream);
         }catch (IOException exception){
             exception.printStackTrace();
             throw new RuntimeException(exception);
         }
-        assertNotNull(uploadResponse);
-        log.info("{}", uploadResponse);
     }
 
 }

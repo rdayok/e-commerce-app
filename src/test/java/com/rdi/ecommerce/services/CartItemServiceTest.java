@@ -32,7 +32,7 @@ public class CartItemServiceTest {
     public void testAddCartItem() throws
             MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, BuyerNotFoundException,
-            ProductNotFoundException, ProductInventoryNotFoundException {
+            ProductNotFoundException, ProductInventoryNotFoundException, MediaUploadException {
 
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
         userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
@@ -74,7 +74,7 @@ public class CartItemServiceTest {
     public void testRemoveCartItem() throws
             MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, BuyerNotFoundException,
-            ProductNotFoundException, ProductInventoryNotFoundException, CannotTakeOutCartItemThatDoesNotExistInYOurCartException {
+            ProductNotFoundException, ProductInventoryNotFoundException, CannotTakeOutCartItemThatDoesNotExistInYOurCartException, MediaUploadException {
 
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
         userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
@@ -117,7 +117,7 @@ public class CartItemServiceTest {
     public void testFindAllCartItemByCartId() throws
             MerchantNotFoundException,
             MerchantIsNotOwnerOfStoreException, BuyerNotFoundException,
-            ProductNotFoundException, ProductInventoryNotFoundException {
+            ProductNotFoundException, ProductInventoryNotFoundException, MediaUploadException {
 
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
         userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");

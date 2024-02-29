@@ -5,6 +5,7 @@ import com.rdi.ecommerce.dto.GetAllProductRequest;
 import com.rdi.ecommerce.dto.GetAllProductsResponse;
 import com.rdi.ecommerce.dto.ProductRequest;
 import com.rdi.ecommerce.dto.ProductResponse;
+import com.rdi.ecommerce.exceptions.MediaUploadException;
 import com.rdi.ecommerce.exceptions.MerchantIsNotOwnerOfStoreException;
 import com.rdi.ecommerce.exceptions.MerchantNotFoundException;
 import com.rdi.ecommerce.exceptions.ProductNotFoundException;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public interface ProductService {
     ProductResponse addProduct(ProductRequest productRequest) throws
-            MerchantNotFoundException, MerchantIsNotOwnerOfStoreException;
+            MerchantNotFoundException, MerchantIsNotOwnerOfStoreException, MediaUploadException;
 
     Product getProductBy(Long productId) throws ProductNotFoundException;
 

@@ -8,11 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.Map;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ECommerceCloudService implements CloudService {
@@ -24,7 +22,6 @@ public class ECommerceCloudService implements CloudService {
             Map<?, ?> uploadResponse = cloudinary.uploader().upload(multipartFile.getBytes(), ObjectUtils.asMap(
                     "resource_type", "auto"
             ));
-            log.info("upload response -> {}", uploadResponse);
             return uploadResponse.get("secure_url").toString();
         } catch (IOException exception) {
             throw new MediaUploadException(exception.getMessage());
