@@ -25,7 +25,7 @@ public class MerchantControllerTest {
 
     @Test
     public void testRegisterMerchant() {
-        String URL = "/api/v1/merchant";
+        String MERCHANT_URL = "/api/v1/merchant";
         ObjectMapper objectMapper = new ObjectMapper();
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
         userRegisterRequestForMerchant.setEmail("dayokr@gmail.com");
@@ -35,7 +35,7 @@ public class MerchantControllerTest {
         merchantRegisterRequest.setStoreName("wadrobe");
         try{
             mockMvc.perform(
-                            MockMvcRequestBuilders.post(URL)
+                            MockMvcRequestBuilders.post(MERCHANT_URL)
                                     .content(objectMapper.writeValueAsString(merchantRegisterRequest))
                                     .contentType(MediaType.APPLICATION_JSON)
                     )

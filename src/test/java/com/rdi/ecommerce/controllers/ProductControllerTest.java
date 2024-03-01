@@ -141,6 +141,7 @@ public class ProductControllerTest {
                                     .part(productCategory)
                                     .part(pricePerUnit)
                                     .part(initialQuantity)
+                                    .contentType(MediaType.MULTIPART_FORM_DATA)
                     )
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print());
