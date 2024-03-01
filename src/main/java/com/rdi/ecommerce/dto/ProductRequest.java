@@ -1,6 +1,8 @@
 package com.rdi.ecommerce.dto;
 
 import com.rdi.ecommerce.enums.Category;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
