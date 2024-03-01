@@ -21,4 +21,10 @@ public class InventoryController {
             ProductInventoryNotFoundException {
         return ResponseEntity.status(OK).body(inventoryService.reserveProductBy(productInventoryId));
     }
+
+    @PostMapping("/return/{productInventoryId}")
+    public ResponseEntity<ApiResponse<?>> returnProduct( @PathVariable Long productInventoryId) throws
+            ProductInventoryNotFoundException {
+        return ResponseEntity.status(OK).body(inventoryService.returnReserveProductBy(productInventoryId));
+    }
 }
