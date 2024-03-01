@@ -1,18 +1,24 @@
 package com.rdi.ecommerce.controllers;
 
+import com.rdi.ecommerce.dto.GetAllProductRequest;
+import com.rdi.ecommerce.dto.GetAllProductsResponse;
 import com.rdi.ecommerce.dto.ProductRequest;
 import com.rdi.ecommerce.dto.ProductResponse;
 import com.rdi.ecommerce.exceptions.MediaUploadException;
 import com.rdi.ecommerce.exceptions.MerchantIsNotOwnerOfStoreException;
 import com.rdi.ecommerce.exceptions.MerchantNotFoundException;
 import com.rdi.ecommerce.services.ProductService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import static javax.security.auth.callback.ConfirmationCallback.OK;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
@@ -39,5 +45,10 @@ public class ProductController {
                 productName, merchantId, pricePerUnit, initialQuantity
         );
         return ResponseEntity.status(CREATED).body(productService.addProduct(productRequest));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<GetAllProductsResponse>> getProducts(@Valid @RequestBody GetAllProductRequest getAllProductRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getAllProducts(getAllProductRequest));
     }
 }
