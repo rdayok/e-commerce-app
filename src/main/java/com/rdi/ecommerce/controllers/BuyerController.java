@@ -3,6 +3,7 @@ package com.rdi.ecommerce.controllers;
 import com.rdi.ecommerce.dto.BuyerRegisterRequest;
 import com.rdi.ecommerce.dto.BuyerRegisterResponse;
 import com.rdi.ecommerce.services.BuyerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class BuyerController {
     private final BuyerService buyerService;
 
     @PostMapping
-    public ResponseEntity<BuyerRegisterResponse> registerBuyer(@RequestBody BuyerRegisterRequest buyerRegisterRequest) {
+    public ResponseEntity<BuyerRegisterResponse> registerBuyer(@Valid @RequestBody BuyerRegisterRequest buyerRegisterRequest) {
         return ResponseEntity.status(CREATED).body(buyerService.registerBuyer(buyerRegisterRequest));
     }
 }
