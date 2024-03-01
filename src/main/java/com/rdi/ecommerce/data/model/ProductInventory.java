@@ -34,4 +34,8 @@ public class ProductInventory {
     }
 
 
+    public void recordSold(Integer quantityOfItem) {
+        reservedQuantity -= quantityOfItem;
+        soldQuantity += quantityOfItem;
+    }
 }

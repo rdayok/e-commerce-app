@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -69,6 +70,11 @@ public class ECommerceInventoryService implements InventoryService {
         productInventory.returnOneProduct();
         inventoryRepository.save(productInventory);
         return  new ApiResponse<>("SUCCESSFUL");
+    }
+
+    @Override
+    public void saveAll(List<ProductInventory> productInventoryList) {
+        inventoryRepository.saveAll(productInventoryList);
     }
 
     private ProductInventory getProductInventory(Long productInventoryId) throws ProductInventoryNotFoundException {

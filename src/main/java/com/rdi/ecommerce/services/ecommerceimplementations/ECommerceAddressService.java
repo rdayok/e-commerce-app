@@ -4,18 +4,18 @@ import com.rdi.ecommerce.data.model.Address;
 import com.rdi.ecommerce.data.model.Buyer;
 import com.rdi.ecommerce.data.model.User;
 import com.rdi.ecommerce.data.repository.AddressRepository;
-import com.rdi.ecommerce.dto.BuyerAddressAddRequest;
 import com.rdi.ecommerce.dto.AddressAddResponse;
+import com.rdi.ecommerce.dto.BuyerAddressAddRequest;
+import com.rdi.ecommerce.exceptions.AddressNotFoundException;
 import com.rdi.ecommerce.exceptions.BuyerNotFoundException;
 import com.rdi.ecommerce.services.AddressService;
 import com.rdi.ecommerce.services.BuyerService;
-import com.rdi.ecommerce.services.UserService;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ECommerceAddressService implements AddressService {
 
     private final BuyerService buyerService;
@@ -31,6 +31,12 @@ public class ECommerceAddressService implements AddressService {
         address.setUser(user);
         Address savedAddress = addressRepository.save(address);
         return modelMapper.map(savedAddress, AddressAddResponse.class);
+    }
+
+    @Override
+    public Address getAddressBy(Long userId) throws AddressNotFoundException {
+        return addressRepository.findByUserId(userId).orElseThrow(() ->
+                new AddressNotFoundException(String.format("The address for user with id %d does not exist", userId)));
     }
 
 }
