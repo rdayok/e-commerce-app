@@ -111,7 +111,8 @@ public class BuyerOrderServiceTest {
         String paymentReference = checkOutResponse.getPaymentReference();
         verifyingCheckoutPaymentRequest.setBuyerOrderId(checkOutResponse.getOrderId());
         verifyingCheckoutPaymentRequest.setBuyerId(buyerRegisterResponse.getId());
-        String confirmCheckoutPaymentResponse = orderService.verifyCheckOutPayment(verifyingCheckoutPaymentRequest);
+
+        ApiResponse<?> confirmCheckoutPaymentResponse = orderService.verifyCheckOutPayment(verifyingCheckoutPaymentRequest);
 
         assertThat(confirmCheckoutPaymentResponse).isNotNull();
     }

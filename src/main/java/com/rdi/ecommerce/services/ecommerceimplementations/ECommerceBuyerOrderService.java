@@ -99,7 +99,7 @@ public class ECommerceBuyerOrderService implements BuyerOrderService {
 
     @Override
     @Transactional
-    public String verifyCheckOutPayment(VerifyingCheckoutPaymentRequest verifyingCheckoutPaymentRequest) throws
+    public ApiResponse<?> verifyCheckOutPayment(VerifyingCheckoutPaymentRequest verifyingCheckoutPaymentRequest) throws
             BuyerOrderNotFoundException, BuyerCannotVerifyPaymentOfBuyerOrderNotTheirsException {
         String SUCCESSFUL = "successful";
         Long buyerOrderId = verifyingCheckoutPaymentRequest.getBuyerOrderId();
@@ -111,7 +111,7 @@ public class ECommerceBuyerOrderService implements BuyerOrderService {
         VerifyPaymentResponse verifyPaymentResponse = paymentService.verifyPayment(paymentReference);
         String paymentStatus = verifyPaymentResponse.getData().getStatus();
         clearCartItemsIfPaymentIsSuccessful(paymentStatus, SUCCESSFUL, buyerOrder, buyerId);
-        return SUCCESSFUL;
+        return new ApiResponse<>(SUCCESSFUL);
     }
 
     private void clearCartItemsIfPaymentIsSuccessful(String paymentStatus,
