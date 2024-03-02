@@ -67,9 +67,9 @@ public class BuyerOrderServiceTest {
         createAddressForBuyer(buyerRegisterResponse);
         assertThat(buyerRegisterResponse).isNotNull();
         createCart(buyerRegisterResponse);
-        AddToCartRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
+        AddCartItemRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
         cartItemService.addCartItem(addToCartRequest);
-        AddToCartRequest addToCartRequest2 = getAddToCartRequest(productResponse2, buyerRegisterResponse);
+        AddCartItemRequest addToCartRequest2 = getAddToCartRequest(productResponse2, buyerRegisterResponse);
         cartItemService.addCartItem(addToCartRequest2);
 
         CheckOutResponse checkOutResponse = orderService.checkOut(buyerRegisterResponse.getId());
@@ -100,9 +100,9 @@ public class BuyerOrderServiceTest {
         createAddressForBuyer(buyerRegisterResponse);
         assertThat(buyerRegisterResponse).isNotNull();
         createCart(buyerRegisterResponse);
-        AddToCartRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
+        AddCartItemRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
         cartItemService.addCartItem(addToCartRequest);
-        AddToCartRequest addToCartRequest2 = getAddToCartRequest(productResponse2, buyerRegisterResponse);
+        AddCartItemRequest addToCartRequest2 = getAddToCartRequest(productResponse2, buyerRegisterResponse);
         cartItemService.addCartItem(addToCartRequest2);
         CheckOutResponse checkOutResponse = orderService.checkOut(buyerRegisterResponse.getId());
         assertThat(checkOutResponse).isNotNull();
@@ -127,8 +127,8 @@ public class BuyerOrderServiceTest {
         assertThat(addressAddResponse).isNotNull();
     }
 
-    private static AddToCartRequest getAddToCartRequest(ProductResponse productResponse, BuyerRegisterResponse buyerRegisterResponse) {
-        AddToCartRequest addToCartRequest = new AddToCartRequest();
+    private static AddCartItemRequest getAddToCartRequest(ProductResponse productResponse, BuyerRegisterResponse buyerRegisterResponse) {
+        AddCartItemRequest addToCartRequest = new AddCartItemRequest();
         addToCartRequest.setProductId(productResponse.getId());
         addToCartRequest.setBuyerId(buyerRegisterResponse.getId());
         return addToCartRequest;

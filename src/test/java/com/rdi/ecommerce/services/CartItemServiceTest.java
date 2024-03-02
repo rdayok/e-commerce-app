@@ -58,7 +58,7 @@ public class CartItemServiceTest {
         assertThat(buyerRegisterResponse).isNotNull();
         createCart(buyerRegisterResponse);
 
-        AddToCartRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
+        AddCartItemRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
         ApiResponse<?> response = cartItemService.addCartItem(addToCartRequest);
 
         assertThat(response).isNotNull();
@@ -80,7 +80,7 @@ public class CartItemServiceTest {
         BuyerRegisterResponse buyerRegisterResponse = registerBuyer("maxret@yahoo.com");
         assertThat(buyerRegisterResponse).isNotNull();
         createCart(buyerRegisterResponse);
-        AddToCartRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
+        AddCartItemRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
         ApiResponse<?> addToCartResponse = cartItemService.addCartItem(addToCartRequest);
         assertThat(addToCartResponse).isNotNull();
 
@@ -112,20 +112,20 @@ public class CartItemServiceTest {
         assertThat(productResponse).isNotNull();
         BuyerRegisterResponse buyerRegisterResponse = registerBuyer("ret@yahoo.com");
         assertThat(buyerRegisterResponse).isNotNull();
-        createCart(buyerRegisterResponse);
-        AddToCartRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
+        CartResponse cartResponse = createCart(buyerRegisterResponse);
+        AddCartItemRequest addToCartRequest = getAddToCartRequest(productResponse, buyerRegisterResponse);
         cartItemService.addCartItem(addToCartRequest);
-        AddToCartRequest addToCartRequest2 = getAddToCartRequest(productResponse2, buyerRegisterResponse);
+        AddCartItemRequest addToCartRequest2 = getAddToCartRequest(productResponse2, buyerRegisterResponse);
         cartItemService.addCartItem(addToCartRequest2);
 
-        List<CartItem> cartItemList = cartItemService.findAllCartItemBuyCartId(buyerRegisterResponse.getId());
+        List<CartItemDetails> cartItemDetailsList = cartItemService.getAllCartItems(cartResponse.getId());
 
-        assertThat(cartItemList).isNotNull();
-        log.info("{}", cartItemList);
+        assertThat(cartItemDetailsList).isNotNull();
+        log.info("{}", cartItemDetailsList);
     }
 
-    private static AddToCartRequest getAddToCartRequest(ProductResponse productResponse, BuyerRegisterResponse buyerRegisterResponse) {
-        AddToCartRequest addToCartRequest = new AddToCartRequest();
+    private static AddCartItemRequest getAddToCartRequest(ProductResponse productResponse, BuyerRegisterResponse buyerRegisterResponse) {
+        AddCartItemRequest addToCartRequest = new AddCartItemRequest();
         addToCartRequest.setProductId(productResponse.getId());
         addToCartRequest.setBuyerId(buyerRegisterResponse.getId());
         return addToCartRequest;
@@ -142,8 +142,8 @@ public class CartItemServiceTest {
         return buyerRegisterResponse;
     }
 
-    private void createCart(BuyerRegisterResponse buyerRegisterResponse) throws BuyerNotFoundException {
-        CartResponse cartResponse = cartService.createCart(buyerRegisterResponse.getId());
+    private CartResponse createCart(BuyerRegisterResponse buyerRegisterResponse) throws BuyerNotFoundException {
+        return cartService.createCart(buyerRegisterResponse.getId());
     }
 
     private MerchantRegisterResponse registerMerchant(String mail) {
