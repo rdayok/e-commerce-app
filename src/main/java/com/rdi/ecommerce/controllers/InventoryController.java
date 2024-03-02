@@ -1,8 +1,13 @@
 package com.rdi.ecommerce.controllers;
 
 import com.rdi.ecommerce.dto.ApiResponse;
+import com.rdi.ecommerce.dto.ProductRestockRequest;
+import com.rdi.ecommerce.exceptions.MerchantNotFoundException;
+import com.rdi.ecommerce.exceptions.OnlyMerchantThatOwnProductCanRestockException;
 import com.rdi.ecommerce.exceptions.ProductInventoryNotFoundException;
+import com.rdi.ecommerce.exceptions.ProductNotFoundException;
 import com.rdi.ecommerce.services.InventoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,5 +31,11 @@ public class InventoryController {
     public ResponseEntity<ApiResponse<?>> returnProduct( @PathVariable Long productInventoryId) throws
             ProductInventoryNotFoundException {
         return ResponseEntity.status(OK).body(inventoryService.returnReserveProductBy(productInventoryId));
+    }
+
+    @PostMapping("/restock")
+    public ResponseEntity<ApiResponse<?>> restockProduct(@Valid @RequestBody ProductRestockRequest productRestockRequest)
+            throws OnlyMerchantThatOwnProductCanRestockException, MerchantNotFoundException, ProductNotFoundException {
+        return ResponseEntity.status(OK).body(inventoryService.restockProduct(productRestockRequest));
     }
 }
