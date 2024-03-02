@@ -10,7 +10,7 @@ import com.rdi.ecommerce.exceptions.ProductNotFoundException;
 
 public interface CartService {
 
-    CartResponse createCart(CartRequest cartRequest) throws BuyerNotFoundException;
+    CartResponse createCart(Long buyerId) throws BuyerNotFoundException;
 
     Cart findByBuyerId(Long buyerId);
 }

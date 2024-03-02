@@ -146,9 +146,7 @@ public class BuyerOrderServiceTest {
     }
 
     private void createCart(BuyerRegisterResponse buyerRegisterResponse) throws BuyerNotFoundException {
-        CartRequest cartRequest = new CartRequest();
-        cartRequest.setBuyerId(buyerRegisterResponse.getId());
-        CartResponse cartResponse = cartService.createCart(cartRequest);
+        CartResponse cartResponse = cartService.createCart(buyerRegisterResponse.getId());
     }
 
     private MerchantRegisterResponse registerMerchant(String mail) {

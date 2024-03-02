@@ -26,14 +26,13 @@ public class ECommerceCartService implements CartService {
     private final ModelMapper modelMapper;
 
     @Override
-    public CartResponse createCart(CartRequest cartRequest) throws BuyerNotFoundException {
-        Cart newCart = setCartData(cartRequest);
+    public CartResponse createCart(Long buyerId) throws BuyerNotFoundException {
+        Cart newCart = setCartData(buyerId);
         Cart createdCart = cartRepository.save(newCart);
         return modelMapper.map(createdCart, CartResponse.class);
     }
 
-    private Cart setCartData(CartRequest cartRequest) throws BuyerNotFoundException {
-        Long buyerId = cartRequest.getBuyerId();
+    private Cart setCartData(Long buyerId) throws BuyerNotFoundException {
         Buyer gottenBuyer = buyerService.getBuyerBy(buyerId);
         Cart newCart = new Cart();
         newCart.setBuyer(gottenBuyer);

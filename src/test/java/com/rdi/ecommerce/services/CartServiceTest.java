@@ -33,9 +33,7 @@ public class CartServiceTest {
         buyerRegisterRequest.setPhoneNumber("07031005737");
         BuyerRegisterResponse buyerRegisterResponse = buyerService.registerBuyer(buyerRegisterRequest);
 
-        CartRequest cartRequest = new CartRequest();
-        cartRequest.setBuyerId(buyerRegisterResponse.getId());
-        CartResponse cartResponse = cartService.createCart(cartRequest);
+        CartResponse cartResponse = cartService.createCart(buyerRegisterResponse.getId());
 
         assertThat(cartResponse).isNotNull();
         log.info("{}", cartResponse);
