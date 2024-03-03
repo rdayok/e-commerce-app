@@ -4,6 +4,7 @@ import com.rdi.ecommerce.data.model.User;
 import com.rdi.ecommerce.data.repository.UserRepository;
 import com.rdi.ecommerce.dto.UserRegisterRequest;
 import com.rdi.ecommerce.dto.UserRegisterResponse;
+import com.rdi.ecommerce.exceptions.UserNotFoundException;
 import com.rdi.ecommerce.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,6 +20,12 @@ public class ECommerceUserService implements UserService {
         User user = modelMapper.map(userRegisterRequest, User.class);
         User registeredUser = userRepository.save(user);
         return modelMapper.map(registeredUser, UserRegisterResponse.class);
+    }
+
+    @Override
+    public User getUserBy(String username) throws UserNotFoundException {
+        return userRepository.findUserByEmail(username).orElseThrow(() ->
+                new UserNotFoundException(String.format("The user with email %s does not exist", username)));
     }
 
 }

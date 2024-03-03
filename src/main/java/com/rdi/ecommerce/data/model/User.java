@@ -4,10 +4,14 @@ import com.rdi.ecommerce.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.rdi.ecommerce.enums.Role.USER;
 
@@ -15,6 +19,7 @@ import static com.rdi.ecommerce.enums.Role.USER;
 @Setter
 @Getter
 @ToString
+@RequiredArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +30,10 @@ public class User {
     private String profilePicture;
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Role role = USER;
+    @ElementCollection
+    private List<Role> role = List.of(USER);
     private LocalDateTime dateRegistered;
+
 
     @PrePersist
     public void setDateRegistered() {
