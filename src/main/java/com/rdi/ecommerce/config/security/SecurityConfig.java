@@ -18,21 +18,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        return httpSecurity.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
-//                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .cors(httpSecurityCorsConfigurer -> {
-//                    CorsConfiguration corsConfiguration = new CorsConfiguration();
-//                    corsConfiguration.setAllowedMethods(List.of("POST", "PUT", "GET"));
-//                    corsConfiguration.setAllowedOrigins(List.of("*"));
-//                })
-//                .addFilterAt(new ECommerceAuthenticationFilter(authenticationManager, jwtService), UsernamePasswordAuthenticationFilter.class)
-//                .addFilterBefore()
-        return null;
-    }
+//    private final AuthenticationManager authenticationManager;
+//    private final JwtService jwtService;
+//
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+////        return httpSecurity.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
+////                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+////                .cors(httpSecurityCorsConfigurer -> {
+////                    CorsConfiguration corsConfiguration = new CorsConfiguration();
+////                    corsConfiguration.setAllowedMethods(List.of("POST", "PUT", "GET"));
+////                    corsConfiguration.setAllowedOrigins(List.of("*"));
+////                })
+////                .addFilterAt(new ECommerceAuthenticationFilter(authenticationManager, jwtService), UsernamePasswordAuthenticationFilter.class)
+////                .addFilterBefore()
+//        return null;
+//    }
 
 }
