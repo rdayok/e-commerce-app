@@ -19,7 +19,6 @@ import static com.rdi.ecommerce.enums.Role.USER;
 @Setter
 @Getter
 @ToString
-@RequiredArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

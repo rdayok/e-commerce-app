@@ -12,7 +12,11 @@ import com.rdi.ecommerce.exceptions.MerchantNotFoundException;
 import com.rdi.ecommerce.services.MerchantService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static com.rdi.ecommerce.enums.Role.MERCHANT;
 
@@ -22,6 +26,7 @@ public class ECommerceMerchantService implements MerchantService {
 
     private final ModelMapper modelMapper;
     private final MerchantRepository merchantRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -48,11 +53,11 @@ public class ECommerceMerchantService implements MerchantService {
         return store;
     }
 
-    private static User setUserData(UserRegisterRequest userRegisterRequest) {
+    private User setUserData(UserRegisterRequest userRegisterRequest) {
         User user = new User();
         user.setEmail(userRegisterRequest.getEmail());
-        user.setPassword(userRegisterRequest.getPassword());
-        user.setRole(MERCHANT);
+        user.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
+        user.setRole(List.of(MERCHANT));
         return user;
     }
 

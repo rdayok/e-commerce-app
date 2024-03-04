@@ -12,7 +12,10 @@ import com.rdi.ecommerce.exceptions.BuyerNotFoundException;
 import com.rdi.ecommerce.services.BuyerService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 import static com.rdi.ecommerce.enums.Role.BUYER;
 
@@ -22,6 +25,7 @@ public class ECommerceBuyerService implements BuyerService {
 
     private final ModelMapper modelMapper;
     private final BuyerRepository buyerRepository;
+    private final PasswordEncoder passwordEncoder;
     @Override
     public BuyerRegisterResponse registerBuyer(BuyerRegisterRequest buyerRegisterRequest) {
         UserRegisterRequest userRegisterRequest = buyerRegisterRequest.getUserRegisterRequest();
@@ -31,10 +35,10 @@ public class ECommerceBuyerService implements BuyerService {
     }
 
     private Buyer setBuyerData(BuyerRegisterRequest buyerRegisterRequest, User user) {
-        user.setRole(BUYER);
+        user.setRole(List.of(BUYER));
         Buyer buyer = new Buyer();
         buyer.setUser(user);
-        buyer.setPhoneNumber(buyerRegisterRequest.getPhoneNumber());
+        buyer.setPhoneNumber(passwordEncoder.encode(buyerRegisterRequest.getPhoneNumber()));
         Buyer registeredBuyer = buyerRepository.save(buyer);
         return registeredBuyer;
     }

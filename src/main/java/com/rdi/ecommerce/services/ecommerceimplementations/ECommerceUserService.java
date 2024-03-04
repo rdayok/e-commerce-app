@@ -23,9 +23,9 @@ public class ECommerceUserService implements UserService {
     }
 
     @Override
-    public User getUserBy(String username) throws UserNotFoundException {
+    public User getUserBy(String username) {
         return userRepository.findUserByEmail(username).orElseThrow(() ->
-                new UserNotFoundException(String.format("The user with email %s does not exist", username)));
+                new RuntimeException(String.format("The user with email %s does not exist", username)));
     }
 
 }

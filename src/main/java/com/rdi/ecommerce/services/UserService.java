@@ -8,5 +8,5 @@ import com.rdi.ecommerce.exceptions.UserNotFoundException;
 public interface UserService {
     UserRegisterResponse register(UserRegisterRequest userRegisterRequest);
 
-    User getUserBy(String username) throws UserNotFoundException;
+    User getUserBy(String username);
 }

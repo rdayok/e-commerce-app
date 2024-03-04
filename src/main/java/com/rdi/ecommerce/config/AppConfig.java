@@ -1,12 +1,11 @@
 package com.rdi.ecommerce.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.rdi.ecommerce.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,12 +21,12 @@ public class AppConfig {
 
     private UserDetails getUserByUsername(UserService userService, String username) {
         var user = userService.getUserBy(username);
-        var autorities = user.getRole();
+        var authorities = user.getRole();
         var userAuthorities =
-                autorities.stream()
+                authorities.stream()
                         .map(authority -> new SimpleGrantedAuthority(authority.name()))
                         .toList();
-        return new org.springframework.security.core.userdetails.User(username, user.getPassword(), userAuthorities);
+        return new User(username, user.getPassword(), userAuthorities);
     }
 
     @Bean
