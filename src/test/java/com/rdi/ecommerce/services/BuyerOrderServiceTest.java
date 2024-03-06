@@ -115,6 +115,7 @@ public class BuyerOrderServiceTest {
         ApiResponse<?> confirmCheckoutPaymentResponse = orderService.verifyCheckOutPayment(verifyingCheckoutPaymentRequest);
 
         assertThat(confirmCheckoutPaymentResponse).isNotNull();
+        log.info("{}", confirmCheckoutPaymentResponse);
     }
 
     private void createAddressForBuyer(BuyerRegisterResponse buyerRegisterResponse) throws BuyerNotFoundException {
@@ -124,7 +125,7 @@ public class BuyerOrderServiceTest {
         buyerAddressAddRequest.setCity("Jos");
         buyerAddressAddRequest.setState("Plateau");
         buyerAddressAddRequest.setBuyerId(buyerRegisterResponse.getId());
-        AddressAddResponse addressAddResponse = addressService.add(buyerAddressAddRequest);
+        AddressAddResponse addressAddResponse = addressService.addAddress(buyerAddressAddRequest);
         assertThat(addressAddResponse).isNotNull();
     }
 

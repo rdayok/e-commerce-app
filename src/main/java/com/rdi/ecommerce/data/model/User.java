@@ -29,7 +29,7 @@ public class User {
     private String profilePicture;
     @NotNull
     @Enumerated(EnumType.STRING)
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<Role> role = List.of(USER);
     private LocalDateTime dateRegistered;
 

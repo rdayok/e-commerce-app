@@ -6,10 +6,8 @@ import com.rdi.ecommerce.dto.BuyerAddressAddRequest;
 import com.rdi.ecommerce.exceptions.AddressNotFoundException;
 import com.rdi.ecommerce.exceptions.BuyerNotFoundException;
 
-import java.util.Optional;
-
 public interface AddressService {
-    AddressAddResponse add(BuyerAddressAddRequest addressAddRequest) throws BuyerNotFoundException;
+    AddressAddResponse addAddress(BuyerAddressAddRequest addressAddRequest) throws BuyerNotFoundException;
 
     Address getAddressBy(Long buyerId) throws AddressNotFoundException;
 }

@@ -11,4 +11,5 @@ import lombok.ToString;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserRegisterResponse {
     private Long id;
+    private String token;
 }

@@ -29,9 +29,11 @@ public class InventoryControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    private String merchantToken;
+    private String buyerToken;
 
     @Test
-    public void testReserveProductByProductInventoryId() throws UnsupportedEncodingException, JsonProcessingException {
+    public void testReserveProduct() throws UnsupportedEncodingException, JsonProcessingException {
         String MERCHANT_URL = "/api/v1/merchant";
         ObjectMapper objectMapper = new ObjectMapper();
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
@@ -47,7 +49,6 @@ public class InventoryControllerTest {
                             MockMvcRequestBuilders.post(MERCHANT_URL)
                                     .content(objectMapper.writeValueAsString(merchantRegisterRequest))
                                     .contentType(MediaType.APPLICATION_JSON)
-
                     )
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print())
@@ -61,6 +62,7 @@ public class InventoryControllerTest {
                 objectMapper.readValue(merchantRegistrationResponseAsString, MerchantRegisterResponse.class);
         String PRODUCT_URL = "/api/v1/product";
         MultipartFile file = getTestFile();
+        merchantToken = merchantRegisterResponse.getJwtToken();
         Long id = merchantRegisterResponse.getId();
         int quantity = 50;
         BigDecimal price = BigDecimal.valueOf(75_000);
@@ -81,6 +83,7 @@ public class InventoryControllerTest {
                                     .part(initialQuantity)
                                     .part(pricePerUnit)
                                     .part(merchantId)
+                                    .header("Authorization", "Bearer " + merchantToken)
                                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -92,12 +95,39 @@ public class InventoryControllerTest {
         assert addProductMvcResult != null;
         String productResponseAsString = addProductMvcResult.getResponse().getContentAsString();
         ProductResponse productResponse = objectMapper.readValue(productResponseAsString, ProductResponse.class);
+        String BUYER_URL = "/api/v1/buyer";
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setEmail("max_ret@yahoo.com");
+        userRegisterRequest.setPassword("secretekey");
+        BuyerRegisterRequest buyerRegisterRequest = new BuyerRegisterRequest();
+        buyerRegisterRequest.setUserRegisterRequest(userRegisterRequest);
+        buyerRegisterRequest.setPhoneNumber("07031005737");
+        MvcResult buyerRegistrationMvcResult = null;
+        try {
+            buyerRegistrationMvcResult = mockMvc.perform(
+                            MockMvcRequestBuilders.post(BUYER_URL)
+                                    .content(objectMapper.writeValueAsString(buyerRegisterRequest))
+                                    .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().is2xxSuccessful())
+                    .andDo(print())
+                    .andReturn();
+        } catch (Exception exception) {
+            log.error(exception.getMessage());
+        }
+        assert buyerRegistrationMvcResult != null;
+        String buyerRegistrationResponseAsString = buyerRegistrationMvcResult.getResponse().getContentAsString();
+        BuyerRegisterResponse buyerRegistrationResponse =
+                objectMapper.readValue(buyerRegistrationResponseAsString, BuyerRegisterResponse.class);
+        buyerToken = buyerRegistrationResponse.getToken();
+
         ProductInventoryResponse productInventoryResponse = productResponse.getProductInventory();
         Long productInventoryId = productInventoryResponse.getId();
         String INVENTORY_URL = "/api/v1/inventory/reserve";
         try {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(String.format("%s/%s", INVENTORY_URL, productInventoryId))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -112,7 +142,7 @@ public class InventoryControllerTest {
         String MERCHANT_URL = "/api/v1/merchant";
         ObjectMapper objectMapper = new ObjectMapper();
         UserRegisterRequest userRegisterRequestForMerchant = new UserRegisterRequest();
-        userRegisterRequestForMerchant.setEmail("max_ret@gmail.com");
+        userRegisterRequestForMerchant.setEmail("maxret@gmail.com");
         userRegisterRequestForMerchant.setPassword("secretekey");
         MerchantRegisterRequest merchantRegisterRequest = new MerchantRegisterRequest();
         merchantRegisterRequest.setUserRegisterRequest(userRegisterRequestForMerchant);
@@ -138,6 +168,7 @@ public class InventoryControllerTest {
                 objectMapper.readValue(merchantRegistrationResponseAsString, MerchantRegisterResponse.class);
         String PRODUCT_URL = "/api/v1/product";
         MultipartFile file = getTestFile();
+        merchantToken = merchantRegisterResponse.getJwtToken();
         Long id = merchantRegisterResponse.getId();
         int quantity = 50;
         BigDecimal price = BigDecimal.valueOf(75_000);
@@ -158,6 +189,7 @@ public class InventoryControllerTest {
                                     .part(initialQuantity)
                                     .part(pricePerUnit)
                                     .part(merchantId)
+                                    .header("Authorization", "Bearer " + merchantToken)
                                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -169,12 +201,39 @@ public class InventoryControllerTest {
         assert addProductMvcResult != null;
         String productResponseAsString = addProductMvcResult.getResponse().getContentAsString();
         ProductResponse productResponse = objectMapper.readValue(productResponseAsString, ProductResponse.class);
+        String BUYER_URL = "/api/v1/buyer";
+        UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
+        userRegisterRequest.setEmail("max@yahoo.com");
+        userRegisterRequest.setPassword("secretekey");
+        BuyerRegisterRequest buyerRegisterRequest = new BuyerRegisterRequest();
+        buyerRegisterRequest.setUserRegisterRequest(userRegisterRequest);
+        buyerRegisterRequest.setPhoneNumber("07031005737");
+        MvcResult buyerRegistrationMvcResult = null;
+        try {
+            buyerRegistrationMvcResult = mockMvc.perform(
+                            MockMvcRequestBuilders.post(BUYER_URL)
+                                    .content(objectMapper.writeValueAsString(buyerRegisterRequest))
+                                    .contentType(MediaType.APPLICATION_JSON)
+                    )
+                    .andExpect(status().is2xxSuccessful())
+                    .andDo(print())
+                    .andReturn();
+        } catch (Exception exception) {
+            log.error(exception.getMessage());
+        }
+        assert buyerRegistrationMvcResult != null;
+        String buyerRegistrationResponseAsString = buyerRegistrationMvcResult.getResponse().getContentAsString();
+        BuyerRegisterResponse buyerRegistrationResponse =
+                objectMapper.readValue(buyerRegistrationResponseAsString, BuyerRegisterResponse.class);
+        buyerToken = buyerRegistrationResponse.getToken();
+
         ProductInventoryResponse productInventoryResponse = productResponse.getProductInventory();
         Long productInventoryId = productInventoryResponse.getId();
         String INVENTORY_URL = "/api/v1/inventory/reserve";
         try {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(String.format("%s/%s", INVENTORY_URL, productInventoryId))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -186,6 +245,7 @@ public class InventoryControllerTest {
         try {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(String.format("%s/%s", INVENTORY_RETURN_URL, productInventoryId))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -212,7 +272,6 @@ public class InventoryControllerTest {
                             MockMvcRequestBuilders.post(MERCHANT_URL)
                                     .content(objectMapper.writeValueAsString(merchantRegisterRequest))
                                     .contentType(MediaType.APPLICATION_JSON)
-
                     )
                     .andExpect(status().is2xxSuccessful())
                     .andDo(print())
@@ -226,6 +285,7 @@ public class InventoryControllerTest {
                 objectMapper.readValue(merchantRegistrationResponseAsString, MerchantRegisterResponse.class);
         String PRODUCT_URL = "/api/v1/product";
         MultipartFile file = getTestFile();
+        merchantToken = merchantRegisterResponse.getJwtToken();
         Long id = merchantRegisterResponse.getId();
         int quantity = 50;
         BigDecimal price = BigDecimal.valueOf(75_000);
@@ -246,6 +306,7 @@ public class InventoryControllerTest {
                                     .part(initialQuantity)
                                     .part(pricePerUnit)
                                     .part(merchantId)
+                                    .header("Authorization", "Bearer " + merchantToken)
                                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -272,6 +333,7 @@ public class InventoryControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(RESTOCK_URL)
                                     .content(objectMapper.writeValueAsString(productRestockRequest))
+                                    .header("Authorization", "Bearer " + merchantToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())

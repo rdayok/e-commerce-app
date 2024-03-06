@@ -29,8 +29,10 @@ public class PayStackPaymentService implements PaymentService {
         RestTemplate restTemplate = new RestTemplate();
         String URL = payStackConfig.getInitialisePaymentUrl();
         HttpHeaders httpHeaders = getHttpHeadersForCloudinary();
-        HttpEntity<PaymentRequest> requestHttpEntity = new RequestEntity<>(paymentRequest, httpHeaders, POST, URI.create(""));
-        ResponseEntity<PayStackPaymentResponse> responseEntity = restTemplate.postForEntity(URL, requestHttpEntity, PayStackPaymentResponse.class);
+        HttpEntity<PaymentRequest> requestHttpEntity =
+                new RequestEntity<>(paymentRequest, httpHeaders, POST, URI.create(""));
+        ResponseEntity<PayStackPaymentResponse> responseEntity =
+                restTemplate.postForEntity(URL, requestHttpEntity, PayStackPaymentResponse.class);
         return responseEntity.getBody();
     }
 

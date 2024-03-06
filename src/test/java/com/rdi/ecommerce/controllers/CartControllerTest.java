@@ -53,11 +53,14 @@ public class CartControllerTest {
         String buyerRegistrationResponseAsString = buyerRegistrationMvcResult.getResponse().getContentAsString();
         BuyerRegisterResponse buyerRegistrationResponse =
                 objectMapper.readValue(buyerRegistrationResponseAsString, BuyerRegisterResponse.class);
+
+        String buyerToken = buyerRegistrationResponse.getToken();
         String CART_URL = "/api/v1/cart";
         Long buyerId = buyerRegistrationResponse.getId();
         try {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(String.format("%s/%s", CART_URL, buyerId))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())

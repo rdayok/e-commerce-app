@@ -56,6 +56,8 @@ public class AddressControllerTest {
         String buyerRegistrationResponseAsString = buyerRegistrationMvcResult.getResponse().getContentAsString();
         BuyerRegisterResponse buyerRegistrationResponse =
                 objectMapper.readValue(buyerRegistrationResponseAsString, BuyerRegisterResponse.class);
+
+        String buyerToken = buyerRegistrationResponse.getToken();
         BuyerAddressAddRequest buyerAddressAddRequest = new BuyerAddressAddRequest();
         buyerAddressAddRequest.setBuildingNumber(2L);
         buyerAddressAddRequest.setStreet("Du");
@@ -67,6 +69,7 @@ public class AddressControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(ADDRESS_URL)
                                     .content(objectMapper.writeValueAsString(buyerAddressAddRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())

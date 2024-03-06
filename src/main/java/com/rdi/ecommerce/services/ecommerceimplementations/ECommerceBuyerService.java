@@ -1,5 +1,6 @@
 package com.rdi.ecommerce.services.ecommerceimplementations;
 
+import com.rdi.ecommerce.config.security.services.JwtService;
 import com.rdi.ecommerce.data.model.Buyer;
 import com.rdi.ecommerce.data.model.Cart;
 import com.rdi.ecommerce.data.model.User;
@@ -26,19 +27,25 @@ public class ECommerceBuyerService implements BuyerService {
     private final ModelMapper modelMapper;
     private final BuyerRepository buyerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+
     @Override
     public BuyerRegisterResponse registerBuyer(BuyerRegisterRequest buyerRegisterRequest) {
         UserRegisterRequest userRegisterRequest = buyerRegisterRequest.getUserRegisterRequest();
         User user = modelMapper.map(userRegisterRequest, User.class);
+        user.setPassword(passwordEncoder.encode(buyerRegisterRequest.getUserRegisterRequest().getPassword()));
         Buyer registeredBuyer = setBuyerData(buyerRegisterRequest, user);
-        return modelMapper.map(registeredBuyer, BuyerRegisterResponse.class);
+        BuyerRegisterResponse buyerRegisterResponse = modelMapper.map(registeredBuyer, BuyerRegisterResponse.class);
+        String jwtToken = jwtService.generateAccessToken(registeredBuyer.getUser().getEmail());
+        buyerRegisterResponse.setToken(jwtToken);
+        return buyerRegisterResponse;
     }
 
     private Buyer setBuyerData(BuyerRegisterRequest buyerRegisterRequest, User user) {
         user.setRole(List.of(BUYER));
         Buyer buyer = new Buyer();
         buyer.setUser(user);
-        buyer.setPhoneNumber(passwordEncoder.encode(buyerRegisterRequest.getPhoneNumber()));
+        buyer.setPhoneNumber(buyerRegisterRequest.getPhoneNumber());
         Buyer registeredBuyer = buyerRepository.save(buyer);
         return registeredBuyer;
     }

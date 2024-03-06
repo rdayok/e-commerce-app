@@ -36,7 +36,6 @@ public interface ProductService {
         productRequest.setProductPicture(file);
         productRequest.setInitialQuantity(initialQuantity);
         productRequest.setPricePerUnit(pricePerUnit);
-        System.out.println(productRequest);
         return productRequest;
     };
 

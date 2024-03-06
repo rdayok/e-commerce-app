@@ -11,5 +11,6 @@ import lombok.ToString;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MerchantRegisterResponse {
     private Long id;
+    private String jwtToken;
     private StoreResponse store;
 }

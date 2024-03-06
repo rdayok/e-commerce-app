@@ -23,9 +23,9 @@ public class ECommerceAddressService implements AddressService {
     private final AddressRepository addressRepository;
 
     @Override
-    public AddressAddResponse add(BuyerAddressAddRequest addressAddRequest) throws BuyerNotFoundException {
+    public AddressAddResponse addAddress( BuyerAddressAddRequest addressAddRequest) throws BuyerNotFoundException {
         Long buyerId = addressAddRequest.getBuyerId();
-        Buyer buyer = buyerService.getBuyerBy(addressAddRequest.getBuyerId());
+        Buyer buyer = buyerService.getBuyerBy(buyerId);
         User user = buyer.getUser();
         Address address = modelMapper.map(addressAddRequest, Address.class);
         address.setUser(user);

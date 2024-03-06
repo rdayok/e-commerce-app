@@ -31,6 +31,8 @@ public class OrderControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    private String merchantToken;
+    private String buyerToken;
 
     @Test
     public void testCheckOut() throws JsonProcessingException, UnsupportedEncodingException {
@@ -61,6 +63,7 @@ public class OrderControllerTest {
 
         log.info("{}", merchantRegisterResponse);
         MultipartFile file = getTestFile();
+        merchantToken = merchantRegisterResponse.getJwtToken();
         String PRODUCT_URL = "/api/v1/product";
         Long id = merchantRegisterResponse.getId();
         int quantity = 100;
@@ -82,6 +85,7 @@ public class OrderControllerTest {
                                     .part(initialQuantity)
                                     .part(pricePerUnit)
                                     .part(merchantId)
+                                    .header("Authorization", "Bearer " + merchantToken)
                                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -117,6 +121,8 @@ public class OrderControllerTest {
         String buyerRegistrationResponseAsString = buyerRegistrationMvcResult.getResponse().getContentAsString();
         BuyerRegisterResponse buyerRegistrationResponse =
                 objectMapper.readValue(buyerRegistrationResponseAsString, BuyerRegisterResponse.class);
+
+        buyerToken = buyerRegistrationResponse.getToken();
         Long buyerId = buyerRegistrationResponse.getId();
         BuyerAddressAddRequest buyerAddressAddRequest = new BuyerAddressAddRequest();
         buyerAddressAddRequest.setBuildingNumber(2L);
@@ -129,6 +135,7 @@ public class OrderControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(ADDRESS_URL)
                                     .content(objectMapper.writeValueAsString(buyerAddressAddRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -136,11 +143,13 @@ public class OrderControllerTest {
         } catch (Exception exception) {
             log.error(exception.getMessage());
         }
+        System.out.println("here i was ss ##################");
 
         String CART_URL = "/api/v1/cart";
         try {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(String.format("%s/%s", CART_URL, buyerId))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -156,6 +165,7 @@ public class OrderControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(CART_ITEM_URL)
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -167,6 +177,7 @@ public class OrderControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(CART_ITEM_URL)
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -174,10 +185,12 @@ public class OrderControllerTest {
         } catch (Exception exception) {
             log.error(exception.getMessage());
         }
+
         String ORDER_URL = "/api/v1/order";
         try {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(ORDER_URL + "/checkout/" + buyerId)
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -216,6 +229,7 @@ public class OrderControllerTest {
 
         log.info("{}", merchantRegisterResponse);
         MultipartFile file = getTestFile();
+        merchantToken = merchantRegisterResponse.getJwtToken();
         String PRODUCT_URL = "/api/v1/product";
         Long id = merchantRegisterResponse.getId();
         int quantity = 100;
@@ -237,6 +251,7 @@ public class OrderControllerTest {
                                     .part(initialQuantity)
                                     .part(pricePerUnit)
                                     .part(merchantId)
+                                    .header("Authorization", "Bearer " + merchantToken)
                                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -248,6 +263,7 @@ public class OrderControllerTest {
         assert addProductResponseMvcResult != null;
         String addProductResponseAsString = addProductResponseMvcResult.getResponse().getContentAsString();
         ProductResponse productResponse = objectMapper.readValue(addProductResponseAsString, ProductResponse.class);
+
         String BUYER_URL = "/api/v1/buyer";
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setEmail("maxret@yahoo.com");
@@ -272,6 +288,8 @@ public class OrderControllerTest {
         String buyerRegistrationResponseAsString = buyerRegistrationMvcResult.getResponse().getContentAsString();
         BuyerRegisterResponse buyerRegistrationResponse =
                 objectMapper.readValue(buyerRegistrationResponseAsString, BuyerRegisterResponse.class);
+
+        buyerToken = buyerRegistrationResponse.getToken();
         Long buyerId = buyerRegistrationResponse.getId();
         BuyerAddressAddRequest buyerAddressAddRequest = new BuyerAddressAddRequest();
         buyerAddressAddRequest.setBuildingNumber(2L);
@@ -280,10 +298,12 @@ public class OrderControllerTest {
         buyerAddressAddRequest.setState("Plateau");
         buyerAddressAddRequest.setBuyerId(buyerId);
         String ADDRESS_URL = "/api/v1/address";
+
         try {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(ADDRESS_URL)
                                     .content(objectMapper.writeValueAsString(buyerAddressAddRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -296,6 +316,7 @@ public class OrderControllerTest {
         try {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(String.format("%s/%s", CART_URL, buyerId))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -311,6 +332,7 @@ public class OrderControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(CART_ITEM_URL)
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -322,6 +344,7 @@ public class OrderControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(CART_ITEM_URL)
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -334,6 +357,7 @@ public class OrderControllerTest {
         try {
             checkoutResponseMvcResult = mockMvc.perform(
                             MockMvcRequestBuilders.post(ORDER_URL + "/checkout/" + buyerId)
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -345,6 +369,7 @@ public class OrderControllerTest {
         assert checkoutResponseMvcResult != null;
         String checkoutResponseAsString = checkoutResponseMvcResult.getResponse().getContentAsString();
         CheckOutResponse checkOutResponse = objectMapper.readValue(checkoutResponseAsString, CheckOutResponse.class);
+        System.out.println(checkOutResponse);
         VerifyingCheckoutPaymentRequest verifyingCheckoutPaymentRequest = new VerifyingCheckoutPaymentRequest();
         verifyingCheckoutPaymentRequest.setBuyerOrderId(checkOutResponse.getOrderId());
         verifyingCheckoutPaymentRequest.setBuyerId(buyerId);
@@ -352,6 +377,7 @@ public class OrderControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(ORDER_URL + "/verify_payment")
                                     .content(objectMapper.writeValueAsString(verifyingCheckoutPaymentRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())

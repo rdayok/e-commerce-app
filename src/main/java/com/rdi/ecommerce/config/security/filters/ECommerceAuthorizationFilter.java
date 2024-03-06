@@ -14,7 +14,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
-import static com.rdi.ecommerce.config.security.utils.SecurityUtils.getPublicEndPoints;
+
+import static com.rdi.ecommerce.config.security.utils.SecurityUtils.getPublicGetEndPoints;
+import static com.rdi.ecommerce.config.security.utils.SecurityUtils.getPublicPostEndPoints;
 
 @Component
 @RequiredArgsConstructor
@@ -25,7 +27,9 @@ public class ECommerceAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        boolean isRequestToPublicEndPoint = request.getMethod().equals("POST") && getPublicEndPoints().contains(request.getServletPath());
+        boolean isRequestToPublicEndPoint =
+                request.getMethod().equals("POST") && getPublicPostEndPoints().contains(request.getRequestURI()) ||
+                request.getMethod().equals("GET") && getPublicGetEndPoints().contains(request.getRequestURI());
         if (isRequestToPublicEndPoint) filterChain.doFilter(request, response);
         else {
             String authorizationHeader = request.getHeader("Authorization");

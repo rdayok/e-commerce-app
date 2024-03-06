@@ -1,5 +1,6 @@
 package com.rdi.ecommerce.services.ecommerceimplementations;
 
+import com.rdi.ecommerce.config.security.services.JwtService;
 import com.rdi.ecommerce.data.model.Inventory;
 import com.rdi.ecommerce.data.model.Merchant;
 import com.rdi.ecommerce.data.model.Store;
@@ -27,13 +28,18 @@ public class ECommerceMerchantService implements MerchantService {
     private final ModelMapper modelMapper;
     private final MerchantRepository merchantRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
 
     @Override
     public MerchantRegisterResponse register(MerchantRegisterRequest merchantRegisterRequest) {
         Merchant merchant = setMerchantData(merchantRegisterRequest);
         Merchant registeredMerchant = merchantRepository.save(merchant);
-        return modelMapper.map(registeredMerchant, MerchantRegisterResponse.class);
+        String jwtToken = jwtService.generateAccessToken(registeredMerchant.getUser().getEmail());
+        MerchantRegisterResponse merchantRegisterResponse =
+                modelMapper.map(registeredMerchant, MerchantRegisterResponse.class);
+        merchantRegisterResponse.setJwtToken(jwtToken);
+        return merchantRegisterResponse;
     }
 
     private Merchant setMerchantData(MerchantRegisterRequest merchantRegisterRequest) {

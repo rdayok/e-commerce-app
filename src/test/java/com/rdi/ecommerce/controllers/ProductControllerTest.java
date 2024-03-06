@@ -60,8 +60,8 @@ public class ProductControllerTest {
         MerchantRegisterResponse merchantRegisterResponse =
                 objectMapper.readValue(merchantRegistrationResponseAsString, MerchantRegisterResponse.class);
 
-        log.info("{}", merchantRegisterResponse);
         MultipartFile file = getTestFile();
+        String merchantToken = merchantRegisterResponse.getJwtToken();
         String PRODUCT_URL = "/api/v1/product";
         Long id = merchantRegisterResponse.getId();
         int quantity = 100;
@@ -82,6 +82,7 @@ public class ProductControllerTest {
                                     .part(initialQuantity)
                                     .part(pricePerUnit)
                                     .part(merchantId)
+                                    .header("Authorization", "Bearer " + merchantToken)
                                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -120,6 +121,7 @@ public class ProductControllerTest {
                 objectMapper.readValue(merchantRegistrationResponseAsString, MerchantRegisterResponse.class);
 
         MultipartFile file = getTestFile();
+        String merchantToken = merchantRegisterResponse.getJwtToken();
         Long id = merchantRegisterResponse.getId();
         BigDecimal price = BigDecimal.valueOf(200000);
         int quantity = 100;
@@ -141,6 +143,7 @@ public class ProductControllerTest {
                                     .part(productCategory)
                                     .part(pricePerUnit)
                                     .part(initialQuantity)
+                                    .header("Authorization", "Bearer " + merchantToken)
                                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -166,4 +169,5 @@ public class ProductControllerTest {
             log.info("Error :: ", exception);
         }
     }
+
 }

@@ -4,6 +4,7 @@ import com.rdi.ecommerce.dto.AddressAddResponse;
 import com.rdi.ecommerce.dto.BuyerAddressAddRequest;
 import com.rdi.ecommerce.exceptions.BuyerNotFoundException;
 import com.rdi.ecommerce.services.AddressService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +22,8 @@ public class AddressController {
     private final AddressService addressService;
 
     @PostMapping
-    public ResponseEntity<AddressAddResponse> add(@RequestBody BuyerAddressAddRequest buyerAddressAddRequest) throws
+    public ResponseEntity<AddressAddResponse> addAddress(@Valid @RequestBody BuyerAddressAddRequest buyerAddressAddRequest) throws
             BuyerNotFoundException {
-        return ResponseEntity.status(CREATED).body(addressService.add(buyerAddressAddRequest));
+        return ResponseEntity.status(CREATED).body(addressService.addAddress(buyerAddressAddRequest));
     }
 }

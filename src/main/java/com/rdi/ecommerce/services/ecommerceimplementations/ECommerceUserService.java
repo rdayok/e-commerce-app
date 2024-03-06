@@ -1,5 +1,6 @@
 package com.rdi.ecommerce.services.ecommerceimplementations;
 
+import com.rdi.ecommerce.config.security.services.JwtService;
 import com.rdi.ecommerce.data.model.User;
 import com.rdi.ecommerce.data.repository.UserRepository;
 import com.rdi.ecommerce.dto.UserRegisterRequest;
@@ -13,12 +14,17 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ECommerceUserService implements UserService {
+
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final JwtService jwtService;
+
     @Override
     public UserRegisterResponse register(UserRegisterRequest userRegisterRequest) {
         User user = modelMapper.map(userRegisterRequest, User.class);
         User registeredUser = userRepository.save(user);
+        String token = jwtService.generateAccessToken(registeredUser.getEmail());
+
         return modelMapper.map(registeredUser, UserRegisterResponse.class);
     }
 

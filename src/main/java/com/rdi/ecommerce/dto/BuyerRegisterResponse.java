@@ -10,4 +10,5 @@ import lombok.ToString;
 @ToString
 public class BuyerRegisterResponse {
     private Long id;
+    private String token;
 }

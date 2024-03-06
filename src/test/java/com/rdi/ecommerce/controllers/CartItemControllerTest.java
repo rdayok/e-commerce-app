@@ -29,6 +29,8 @@ public class CartItemControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    private String merchantToken;
+    private String buyerToken;
 
     @Test
     public void testAddCartItem() throws JsonProcessingException, UnsupportedEncodingException {
@@ -57,8 +59,8 @@ public class CartItemControllerTest {
         MerchantRegisterResponse merchantRegisterResponse =
                 objectMapper.readValue(merchantRegistrationResponseAsString, MerchantRegisterResponse.class);
 
-        log.info("{}", merchantRegisterResponse);
         MultipartFile file = getTestFile();
+        merchantToken = merchantRegisterResponse.getJwtToken();
         String PRODUCT_URL = "/api/v1/product";
         Long id = merchantRegisterResponse.getId();
         int quantity = 100;
@@ -80,6 +82,7 @@ public class CartItemControllerTest {
                                     .part(initialQuantity)
                                     .part(pricePerUnit)
                                     .part(merchantId)
+                                    .header("Authorization", "Bearer " + merchantToken)
                                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -115,11 +118,13 @@ public class CartItemControllerTest {
         String buyerRegistrationResponseAsString = buyerRegistrationMvcResult.getResponse().getContentAsString();
         BuyerRegisterResponse buyerRegistrationResponse =
                 objectMapper.readValue(buyerRegistrationResponseAsString, BuyerRegisterResponse.class);
+        buyerToken = buyerRegistrationResponse.getToken();
         String CART_URL = "/api/v1/cart";
         Long buyerId = buyerRegistrationResponse.getId();
         try {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(String.format("%s/%s", CART_URL, buyerId))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -135,6 +140,7 @@ public class CartItemControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(CART_ITEM_URL)
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -171,8 +177,8 @@ public class CartItemControllerTest {
         MerchantRegisterResponse merchantRegisterResponse =
                 objectMapper.readValue(merchantRegistrationResponseAsString, MerchantRegisterResponse.class);
 
-        log.info("{}", merchantRegisterResponse);
         MultipartFile file = getTestFile();
+        merchantToken = merchantRegisterResponse.getJwtToken();
         String PRODUCT_URL = "/api/v1/product";
         Long id = merchantRegisterResponse.getId();
         int quantity = 100;
@@ -194,6 +200,7 @@ public class CartItemControllerTest {
                                     .part(initialQuantity)
                                     .part(pricePerUnit)
                                     .part(merchantId)
+                                    .header("Authorization", "Bearer " + merchantToken)
                                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -229,11 +236,13 @@ public class CartItemControllerTest {
         String buyerRegistrationResponseAsString = buyerRegistrationMvcResult.getResponse().getContentAsString();
         BuyerRegisterResponse buyerRegistrationResponse =
                 objectMapper.readValue(buyerRegistrationResponseAsString, BuyerRegisterResponse.class);
+        buyerToken = buyerRegistrationResponse.getToken();
         String CART_URL = "/api/v1/cart";
         Long buyerId = buyerRegistrationResponse.getId();
         try {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(String.format("%s/%s", CART_URL, buyerId))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -249,6 +258,7 @@ public class CartItemControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(CART_ITEM_URL)
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -260,6 +270,7 @@ public class CartItemControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(CART_ITEM_URL+"/remove")
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -296,8 +307,8 @@ public class CartItemControllerTest {
         MerchantRegisterResponse merchantRegisterResponse =
                 objectMapper.readValue(merchantRegistrationResponseAsString, MerchantRegisterResponse.class);
 
-        log.info("{}", merchantRegisterResponse);
         MultipartFile file = getTestFile();
+        merchantToken = merchantRegisterResponse.getJwtToken();
         String PRODUCT_URL = "/api/v1/product";
         Long id = merchantRegisterResponse.getId();
         int quantity = 100;
@@ -319,6 +330,7 @@ public class CartItemControllerTest {
                                     .part(initialQuantity)
                                     .part(pricePerUnit)
                                     .part(merchantId)
+                                    .header("Authorization", "Bearer " + merchantToken)
                                     .contentType(MediaType.MULTIPART_FORM_DATA)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -354,12 +366,14 @@ public class CartItemControllerTest {
         String buyerRegistrationResponseAsString = buyerRegistrationMvcResult.getResponse().getContentAsString();
         BuyerRegisterResponse buyerRegistrationResponse =
                 objectMapper.readValue(buyerRegistrationResponseAsString, BuyerRegisterResponse.class);
+        buyerToken = buyerRegistrationResponse.getToken();
         String CART_URL = "/api/v1/cart";
         Long buyerId = buyerRegistrationResponse.getId();
         MvcResult cartResponseMvcResult = null;
         try {
             cartResponseMvcResult = mockMvc.perform(
                             MockMvcRequestBuilders.post(String.format("%s/%s", CART_URL, buyerId))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -380,6 +394,7 @@ public class CartItemControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(CART_ITEM_URL)
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -391,6 +406,7 @@ public class CartItemControllerTest {
             mockMvc.perform(
                             MockMvcRequestBuilders.post(CART_ITEM_URL)
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
@@ -402,6 +418,7 @@ public class CartItemControllerTest {
         try {
             mockMvc.perform(
                             MockMvcRequestBuilders.get(String.format("%s/%d", CART_ITEM_URL,cartId))
+                                    .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
                     )
                     .andExpect(status().is2xxSuccessful())
