@@ -28,10 +28,6 @@ public class AppConfig {
         SimpleGrantedAuthority userRole = new SimpleGrantedAuthority(role.name());
         Collection<SimpleGrantedAuthority> authority = new ArrayList<>();
         authority.add(userRole);
-//        var userAuthorities =
-//                authorities.stream()
-//                        .map(authority -> new SimpleGrantedAuthority(authority.name()))
-//                        .toList();
         return new User(username, user.getPassword(), authority);
     }
 

@@ -43,9 +43,6 @@ public class ECommerceAuthorizationFilter extends OncePerRequestFilter {
             SimpleGrantedAuthority userRole = new SimpleGrantedAuthority(role.name());
             Collection<SimpleGrantedAuthority> authority = new ArrayList<>();
             authority.add(userRole);
-//            var authority= user.getRole().stream()
-//                    .map(role -> new SimpleGrantedAuthority(role.name()))
-//                    .toList();
             var authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authority);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
