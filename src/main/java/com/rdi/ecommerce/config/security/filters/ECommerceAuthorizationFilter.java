@@ -2,6 +2,7 @@ package com.rdi.ecommerce.config.security.filters;
 
 import com.rdi.ecommerce.config.security.services.JwtService;
 import com.rdi.ecommerce.data.model.User;
+import com.rdi.ecommerce.enums.Role;
 import com.rdi.ecommerce.services.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static com.rdi.ecommerce.config.security.utils.SecurityUtils.getPublicGetEndPoints;
 import static com.rdi.ecommerce.config.security.utils.SecurityUtils.getPublicPostEndPoints;
@@ -36,10 +39,14 @@ public class ECommerceAuthorizationFilter extends OncePerRequestFilter {
             String token = authorizationHeader.substring("Bearer ".length());
             String username = jwtService.extractUsernameFrom(token);
             User user = userService.getUserBy(username);
-            var authorities = user.getRole().stream()
-                    .map(role -> new SimpleGrantedAuthority(role.name()))
-                    .toList();
-            var authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authorities);
+            Role role = user.getRole();
+            SimpleGrantedAuthority userRole = new SimpleGrantedAuthority(role.name());
+            Collection<SimpleGrantedAuthority> authority = new ArrayList<>();
+            authority.add(userRole);
+//            var authority= user.getRole().stream()
+//                    .map(role -> new SimpleGrantedAuthority(role.name()))
+//                    .toList();
+            var authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), null, authority);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
         }

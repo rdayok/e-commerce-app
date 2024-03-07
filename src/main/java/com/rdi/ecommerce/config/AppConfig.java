@@ -11,6 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 @Configuration
 public class AppConfig {
 
@@ -21,12 +24,15 @@ public class AppConfig {
 
     private UserDetails getUserByUsername(UserService userService, String username) {
         var user = userService.getUserBy(username);
-        var authorities = user.getRole();
-        var userAuthorities =
-                authorities.stream()
-                        .map(authority -> new SimpleGrantedAuthority(authority.name()))
-                        .toList();
-        return new User(username, user.getPassword(), userAuthorities);
+        var role = user.getRole();
+        SimpleGrantedAuthority userRole = new SimpleGrantedAuthority(role.name());
+        Collection<SimpleGrantedAuthority> authority = new ArrayList<>();
+        authority.add(userRole);
+//        var userAuthorities =
+//                authorities.stream()
+//                        .map(authority -> new SimpleGrantedAuthority(authority.name()))
+//                        .toList();
+        return new User(username, user.getPassword(), authority);
     }
 
     @Bean

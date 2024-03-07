@@ -27,10 +27,8 @@ public class User {
     private String email;
     private String password;
     private String profilePicture;
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<Role> role = List.of(USER);
+    private Role role = USER;
     private LocalDateTime dateRegistered;
 
 

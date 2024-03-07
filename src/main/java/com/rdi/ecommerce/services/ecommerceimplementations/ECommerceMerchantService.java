@@ -63,7 +63,7 @@ public class ECommerceMerchantService implements MerchantService {
         User user = new User();
         user.setEmail(userRegisterRequest.getEmail());
         user.setPassword(passwordEncoder.encode(userRegisterRequest.getPassword()));
-        user.setRole(List.of(MERCHANT));
+        user.setRole(MERCHANT);
         return user;
     }
 

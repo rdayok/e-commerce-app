@@ -42,7 +42,7 @@ public class ECommerceBuyerService implements BuyerService {
     }
 
     private Buyer setBuyerData(BuyerRegisterRequest buyerRegisterRequest, User user) {
-        user.setRole(List.of(BUYER));
+        user.setRole(BUYER);
         Buyer buyer = new Buyer();
         buyer.setUser(user);
         buyer.setPhoneNumber(buyerRegisterRequest.getPhoneNumber());
