@@ -1,7 +1,7 @@
 package com.rdi.ecommerce.enums;
 
 public enum Role {
-    ADMIN,
+    SUPER_ADMIN,
     MERCHANT,
     BUYER,
     USER

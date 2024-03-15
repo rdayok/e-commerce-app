@@ -1,5 +1,6 @@
 package com.rdi.ecommerce.services;
 
+import com.rdi.ecommerce.data.model.User;
 import com.rdi.ecommerce.dto.UserRegisterRequest;
 import com.rdi.ecommerce.dto.UserRegisterResponse;
 import com.rdi.ecommerce.enums.Role;
@@ -15,6 +16,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class UserServiceTest {
     @Autowired
     private UserService userService;
+
 
     @Test
     public void testUserRegistration(){
@@ -44,5 +46,7 @@ public class UserServiceTest {
         log.info("{}", userRegisterResponse);
         log.info("{}", userRegisterResponse2);
     }
+
+
 
 }
