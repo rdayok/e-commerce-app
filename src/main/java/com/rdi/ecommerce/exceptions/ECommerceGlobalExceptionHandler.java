@@ -29,4 +29,10 @@ public class ECommerceGlobalExceptionHandler {
         error.put("Error ", exception.getMessage());
         return ResponseEntity.status(exception.getHttpStatus()).body(error);
     }
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Map<String, String>> handleECommerceOtherException(RuntimeException exception) {
+        Map<String, String> error = new HashMap<>();
+        error.put("Error ", exception.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
 }

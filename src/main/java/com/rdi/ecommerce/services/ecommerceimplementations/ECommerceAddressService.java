@@ -27,10 +27,19 @@ public class ECommerceAddressService implements AddressService {
         Long buyerId = addressAddRequest.getBuyerId();
         Buyer buyer = buyerService.getBuyerBy(buyerId);
         User user = buyer.getUser();
-        Address address = modelMapper.map(addressAddRequest, Address.class);
+        Address address = setAddressFields(addressAddRequest);
         address.setUser(user);
         Address savedAddress = addressRepository.save(address);
         return modelMapper.map(savedAddress, AddressAddResponse.class);
+    }
+
+    private Address setAddressFields(BuyerAddressAddRequest addressAddRequest) {
+        Address address = new Address();
+        address.setState(addressAddRequest.getState());
+        address.setCity(addressAddRequest.getCity());
+        address.setStreet(addressAddRequest.getStreet());
+        address.setBuildingNumber(addressAddRequest.getBuildingNumber());
+        return address;
     }
 
     @Override

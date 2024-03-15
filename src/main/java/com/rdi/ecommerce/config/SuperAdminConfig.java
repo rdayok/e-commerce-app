@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class SuperAdminConfig implements CommandLineRunner {
     @Value("${adminEmail}")
     private String adminUsername;
-    @Value("${adminPass}")
+    @Value("${adminPassword}")
     private String adminPassword;
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();

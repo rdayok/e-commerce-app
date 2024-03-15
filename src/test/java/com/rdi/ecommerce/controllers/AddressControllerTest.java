@@ -59,7 +59,7 @@ public class AddressControllerTest {
 
         String buyerToken = buyerRegistrationResponse.getToken();
         BuyerAddressAddRequest buyerAddressAddRequest = new BuyerAddressAddRequest();
-        buyerAddressAddRequest.setBuildingNumber(2L);
+        buyerAddressAddRequest.setBuildingNumber(1L);
         buyerAddressAddRequest.setStreet("Du");
         buyerAddressAddRequest.setCity("Jos");
         buyerAddressAddRequest.setState("Plateau");

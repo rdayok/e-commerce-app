@@ -46,8 +46,7 @@ public class ECommerceBuyerService implements BuyerService {
         Buyer buyer = new Buyer();
         buyer.setUser(user);
         buyer.setPhoneNumber(buyerRegisterRequest.getPhoneNumber());
-        Buyer registeredBuyer = buyerRepository.save(buyer);
-        return registeredBuyer;
+        return buyerRepository.save(buyer);
     }
 
     @Override
