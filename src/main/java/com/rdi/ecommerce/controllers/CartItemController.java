@@ -24,7 +24,7 @@ public class CartItemController {
 
     private final CartItemService cartItemService;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<ApiResponse<?>> addCartItem(@RequestBody AddCartItemRequest addCartItemRequest) throws
             BuyerNotFoundException, ProductNotFoundException, ProductInventoryNotFoundException {
         return ResponseEntity.status(CREATED).body(cartItemService.addCartItem(addCartItemRequest));
@@ -38,7 +38,7 @@ public class CartItemController {
     }
 
     @GetMapping("/{cartId}")
-    public ResponseEntity<List<CartItemDetails>> getCartItems(@PathVariable Long cartId) {
+    public ResponseEntity<List<CartItemDetails>> getAllCartItems(@PathVariable Long cartId) {
         return ResponseEntity.status(OK).body(cartItemService.getAllCartItems(cartId));
     }
 

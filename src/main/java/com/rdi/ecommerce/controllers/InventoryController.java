@@ -21,18 +21,6 @@ public class InventoryController {
 
     private final InventoryService inventoryService;
 
-    @PostMapping("/reserve/{productInventoryId}")
-    public ResponseEntity<ApiResponse<?>> reserveProduct( @PathVariable Long productInventoryId) throws
-            ProductInventoryNotFoundException {
-        return ResponseEntity.status(OK).body(inventoryService.reserveProductBy(productInventoryId));
-    }
-
-    @PostMapping("/return/{productInventoryId}")
-    public ResponseEntity<ApiResponse<?>> returnProduct( @PathVariable Long productInventoryId) throws
-            ProductInventoryNotFoundException {
-        return ResponseEntity.status(OK).body(inventoryService.returnReserveProductBy(productInventoryId));
-    }
-
     @PostMapping("/restock")
     public ResponseEntity<ApiResponse<?>> restockProduct(@Valid @RequestBody ProductRestockRequest productRestockRequest)
             throws OnlyMerchantThatOwnProductCanRestockException, MerchantNotFoundException, ProductNotFoundException {

@@ -163,7 +163,7 @@ public class OrderControllerTest {
         addCartItemRequest.setBuyerId(buyerId);
         try {
             mockMvc.perform(
-                            MockMvcRequestBuilders.post(CART_ITEM_URL)
+                            MockMvcRequestBuilders.post(CART_ITEM_URL + "/add")
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
                                     .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
@@ -175,7 +175,7 @@ public class OrderControllerTest {
         }
         try {
             mockMvc.perform(
-                            MockMvcRequestBuilders.post(CART_ITEM_URL)
+                            MockMvcRequestBuilders.post(CART_ITEM_URL + "/add")
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
                                     .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
@@ -330,7 +330,7 @@ public class OrderControllerTest {
         addCartItemRequest.setBuyerId(buyerId);
         try {
             mockMvc.perform(
-                            MockMvcRequestBuilders.post(CART_ITEM_URL)
+                            MockMvcRequestBuilders.post(CART_ITEM_URL + "/add")
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
                                     .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
@@ -342,7 +342,7 @@ public class OrderControllerTest {
         }
         try {
             mockMvc.perform(
-                            MockMvcRequestBuilders.post(CART_ITEM_URL)
+                            MockMvcRequestBuilders.post(CART_ITEM_URL + "/add")
                                     .content(objectMapper.writeValueAsString(addCartItemRequest))
                                     .header("Authorization", "Bearer " + buyerToken)
                                     .contentType(MediaType.APPLICATION_JSON)
