@@ -61,7 +61,6 @@ public class OrderControllerTest {
         MerchantRegisterResponse merchantRegisterResponse =
                 objectMapper.readValue(merchantRegistrationResponseAsString, MerchantRegisterResponse.class);
 
-        log.info("{}", merchantRegisterResponse);
         MultipartFile file = getTestFile();
         merchantToken = merchantRegisterResponse.getJwtToken();
         String PRODUCT_URL = "/api/v1/product";
@@ -143,7 +142,6 @@ public class OrderControllerTest {
         } catch (Exception exception) {
             log.error(exception.getMessage());
         }
-        System.out.println("here i was ss ##################");
 
         String CART_URL = "/api/v1/cart";
         try {
@@ -227,7 +225,6 @@ public class OrderControllerTest {
         MerchantRegisterResponse merchantRegisterResponse =
                 objectMapper.readValue(merchantRegistrationResponseAsString, MerchantRegisterResponse.class);
 
-        log.info("{}", merchantRegisterResponse);
         MultipartFile file = getTestFile();
         merchantToken = merchantRegisterResponse.getJwtToken();
         String PRODUCT_URL = "/api/v1/product";
@@ -369,7 +366,6 @@ public class OrderControllerTest {
         assert checkoutResponseMvcResult != null;
         String checkoutResponseAsString = checkoutResponseMvcResult.getResponse().getContentAsString();
         CheckOutResponse checkOutResponse = objectMapper.readValue(checkoutResponseAsString, CheckOutResponse.class);
-        System.out.println(checkOutResponse);
         VerifyingCheckoutPaymentRequest verifyingCheckoutPaymentRequest = new VerifyingCheckoutPaymentRequest();
         verifyingCheckoutPaymentRequest.setBuyerOrderId(checkOutResponse.getOrderId());
         verifyingCheckoutPaymentRequest.setBuyerId(buyerId);

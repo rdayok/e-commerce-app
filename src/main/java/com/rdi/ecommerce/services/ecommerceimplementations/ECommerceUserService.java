@@ -46,7 +46,6 @@ public class ECommerceUserService implements UserService {
     public void initialiseSuperAdmin(UserRegisterRequest userRegisterRequest) {
         User user = modelMapper.map(userRegisterRequest, User.class);
         user.setRole(SUPER_ADMIN);
-        System.out.println(user);
         userRepository.save(user);
     }
 

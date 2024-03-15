@@ -7,7 +7,9 @@ import com.rdi.ecommerce.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Configuration
@@ -18,6 +20,8 @@ public class SuperAdminConfig implements CommandLineRunner {
     @Value("${adminPass}")
     private String adminPassword;
     private final UserService userService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -29,7 +33,7 @@ public class SuperAdminConfig implements CommandLineRunner {
     private void initialiseSuperAdmin() {
         UserRegisterRequest userRegisterRequest = new UserRegisterRequest();
         userRegisterRequest.setEmail(adminUsername);
-        userRegisterRequest.setPassword(adminPassword);
+        userRegisterRequest.setPassword(bCryptPasswordEncoder.encode(adminPassword));
         userService.initialiseSuperAdmin(userRegisterRequest);
     }
 }
